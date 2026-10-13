@@ -1,0 +1,1183 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Media pembelajaran interaktif KPK dan FPB untuk masalah sehari-hari, Kelas 5 SD.">
+<meta name="theme-color" content="#2457D6">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ccircle cx='24' cy='32' r='20' fill='%232457D6' fill-opacity='.9'/%3E%3Ccircle cx='40' cy='32' r='20' fill='%23D96F00' fill-opacity='.8'/%3E%3C/svg%3E">
+<title>KPK dan FPB dalam Kehidupan Sehari-hari | Media Pembelajaran Interaktif Kelas 5</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@400;500;600;700&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
+<noscript><link href="https://fonts.googleapis.com/css2?family=Lexend:wght@400;500;600;700&display=swap" rel="stylesheet"></noscript>
+<style>
+:root{
+  --bg:#F4F6FB; --surface:#FFFFFF; --ink:#0F1B2D; --muted:#53627A; --line:#DCE2EE;
+  --a:#2457D6; --a-bg:#E7EEFD; --a-cell:#CFDDFB; --a-ink:#163C9E;
+  --b:#D96F00; --b-bg:#FFEFD9; --b-cell:#FFD9A8; --b-ink:#7A3C00;
+  --ab:#6B3FD4; --ab-bg:#EEE7FC;
+  --ok:#0E7A57; --ok-bg:#DFF4EB; --bad:#B42318; --bad-bg:#FDEBE9;
+  --font:'Lexend','Segoe UI',system-ui,-apple-system,sans-serif;
+  --r:14px;
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--font);font-size:16px;line-height:1.6}
+h1,h2,h3,h4{line-height:1.25;margin:0 0 .5em}
+h2{font-size:clamp(1.5rem,3.2vw,2.1rem);font-weight:700;letter-spacing:-.01em}
+h3{font-size:1.2rem;font-weight:700}
+h4{font-size:1rem;font-weight:600}
+p{margin:0 0 .9em}
+button,input,select,textarea{font:inherit;color:inherit}
+button{cursor:pointer}
+:focus-visible{outline:3px solid #1D3FA8;outline-offset:2px}
+.ta{color:var(--a-ink);font-weight:700}
+.tb{color:var(--b-ink);font-weight:700}
+.tab2{color:var(--ab);font-weight:700}
+.muted{color:var(--muted)}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+
+/* ---------- Bar ---------- */
+.bar{position:sticky;top:0;z-index:40;display:flex;align-items:center;gap:14px;padding:10px clamp(14px,3vw,32px);background:var(--surface);border-bottom:1px solid var(--line)}
+.bar svg{flex:none}
+.bar .tt{font-weight:700;line-height:1.2}
+.bar .tt small{display:block;font-weight:400;color:var(--muted);font-size:.8rem}
+.prog{flex:1;max-width:340px;margin-left:auto}
+.prog .lb{display:flex;justify-content:space-between;font-size:.8rem;color:var(--muted);margin-bottom:3px}
+.track{height:8px;background:#E4E9F3;border-radius:99px;overflow:hidden}
+.fill{height:100%;background:var(--ok);border-radius:99px;transition:width .4s}
+
+/* ---------- Shell ---------- */
+.shell{max-width:1240px;margin:0 auto;display:grid;grid-template-columns:270px minmax(0,1fr);gap:clamp(18px,3vw,40px);padding:22px clamp(14px,3vw,32px) 0}
+.menu{position:sticky;top:76px;align-self:start;max-height:calc(100vh - 92px);overflow:auto;padding-bottom:20px}
+.mg{margin:14px 0 6px;font-weight:700;color:var(--muted);font-size:.85rem}
+.mg:first-child{margin-top:0}
+.mi{display:flex;gap:10px;align-items:center;width:100%;text-align:left;border:0;background:transparent;padding:8px 10px;border-radius:12px;font-weight:500;color:var(--ink)}
+.mi:hover:not([aria-disabled=true]){background:#EAEFF9}
+.mi .no{flex:none;width:28px;height:28px;border-radius:50%;display:grid;place-items:center;font-size:.8rem;font-weight:700;background:#E4E9F3;color:var(--muted)}
+.mi.cur{background:var(--a-bg)}
+.mi.cur .no{background:var(--a);color:#fff}
+.mi.ok .no{background:var(--ok);color:#fff}
+.mi[aria-disabled=true]{opacity:.5;cursor:not-allowed}
+.score{margin-top:18px;padding:12px 14px;border-left:3px solid var(--line);font-size:.9rem;color:var(--muted)}
+.score b{color:var(--ink)}
+
+.content{min-width:0}
+#stage{outline:none;padding-bottom:24px;min-height:60vh}
+.pager{position:sticky;bottom:0;z-index:20;display:flex;align-items:center;justify-content:space-between;gap:10px;padding:10px 0 calc(10px + env(safe-area-inset-bottom,0px));background:linear-gradient(to top,var(--bg) 80%,rgba(244,246,251,0))}
+.pager .mid{font-size:.85rem;color:var(--muted);text-align:center}
+
+/* ---------- Buttons ---------- */
+.btn{border:0;border-radius:12px;padding:11px 20px;font-weight:600;background:var(--a);color:#fff;min-height:46px}
+.btn:hover:not(:disabled){background:#1B46B3}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+.btn.ghost{background:var(--surface);color:var(--ink);border:1.5px solid var(--line)}
+.btn.ghost:hover:not(:disabled){border-color:var(--ink);background:var(--surface)}
+.btn.sm{padding:7px 14px;min-height:38px;font-size:.92rem}
+.btn.big{padding:15px 30px;font-size:1.1rem}
+.btn.ok{background:var(--ok)}
+.btnrow{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0}
+
+/* ---------- Blocks ---------- */
+.stage-head{margin-bottom:20px}
+.stage-head p{color:var(--muted);max-width:64ch}
+.block{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:clamp(16px,2.4vw,26px);margin-bottom:18px}
+.note{border-left:4px solid var(--a);background:var(--a-bg);padding:12px 16px;border-radius:0 12px 12px 0;margin:14px 0}
+.note.b{border-color:var(--b);background:var(--b-bg)}
+.note.ab{border-color:var(--ab);background:var(--ab-bg)}
+.note p:last-child{margin-bottom:0}
+.contoh{padding-left:14px;border-left:3px solid var(--line);color:var(--muted)}
+.qtext{font-weight:600;font-size:1.05rem;margin:0 0 12px}
+.lead{font-size:1.15rem;color:var(--muted);max-width:56ch}
+label.f{display:block;font-weight:600;margin:14px 0 4px;font-size:.95rem}
+textarea,input[type=number],input[type=text]{width:100%;padding:10px 12px;border:1.5px solid var(--line);border-radius:10px;background:#fff;min-height:44px}
+textarea{min-height:84px;resize:vertical}
+input[type=number]{max-width:160px}
+textarea:focus,input:focus{border-color:var(--a)}
+details.teacher{margin-top:14px;border:1px dashed var(--line);border-radius:12px;padding:10px 14px;color:var(--muted);font-size:.92rem}
+details.teacher summary{cursor:pointer;font-weight:600;color:var(--ink)}
+
+/* ---------- Hero ---------- */
+.hero{background:var(--surface);border:1px solid var(--line);border-radius:20px;padding:clamp(18px,3vw,36px);margin-bottom:18px;overflow:hidden}
+.hero h2{margin-bottom:.35em}
+.hero h2 span{display:block}
+.hero h2 .t1{font-size:clamp(1.05rem,2.6vw,1.5rem);font-weight:600;color:var(--muted,#4A5B78);margin-bottom:.25em}
+.hero h2 .t2{font-size:clamp(1.8rem,4.4vw,3rem);max-width:20ch}
+.hero svg{display:block;width:100%;height:auto;margin-top:14px}
+.goal ul{margin:8px 0 0;padding-left:20px}
+.goal li{margin-bottom:6px}
+.road{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:18px 0}
+.road div{padding:12px 14px;border-radius:12px;background:var(--surface);border:1px solid var(--line)}
+.road b{display:block}
+.road span{font-size:.9rem;color:var(--muted)}
+
+/* ---------- Chips / choices ---------- */
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin:8px 0 4px}
+.chip{border:1.5px solid var(--line);background:#fff;border-radius:99px;padding:7px 16px;font-weight:600;min-height:40px}
+.chip:hover{border-color:var(--a)}
+.chip.on{background:var(--a);border-color:var(--a);color:#fff}
+.sub{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:16px}
+.sub .chip.done::after{content:" ✓"}
+.stepper{display:inline-flex;align-items:center;border:1.5px solid var(--line);border-radius:12px;overflow:hidden;background:#fff}
+.stepper button{width:44px;height:44px;border:0;background:#fff;font-size:1.3rem;font-weight:700}
+.stepper button:hover:not(:disabled){background:var(--a-bg)}
+.stepper button:disabled{opacity:.35;cursor:not-allowed}
+.stepper output{min-width:54px;text-align:center;font-weight:700;font-size:1.1rem}
+.chooser{display:flex;flex-wrap:wrap;align-items:center;gap:10px 18px;margin:10px 0}
+.chooser .lab{font-weight:600}
+
+/* ---------- Number grid ---------- */
+.grid10{display:grid;grid-template-columns:repeat(10,1fr);gap:4px;margin:12px 0}
+.cell{aspect-ratio:1;display:grid;place-items:center;border-radius:8px;background:#EBEFF8;font-size:.82rem;font-weight:600;color:var(--muted);border:0;padding:0;transition:background .15s}
+button.cell:hover{background:#DDE4F3}
+.cell.ca{background:var(--a-cell);color:var(--a-ink)}
+.cell.cb{background:var(--b-cell);color:var(--b-ink)}
+.cell.cab{background:var(--ab);color:#fff}
+.cell.now{outline:3px solid var(--ink);outline-offset:-1px}
+.legend{display:flex;flex-wrap:wrap;gap:6px 16px;font-size:.85rem;color:var(--muted);margin-top:6px}
+.legend i{display:inline-block;width:14px;height:14px;border-radius:4px;vertical-align:-2px;margin-right:5px}
+
+.num{display:inline-block;min-width:38px;text-align:center;padding:3px 9px;margin:2px 4px 2px 0;border-radius:99px;font-weight:600;background:#EBEFF8}
+.num.cab{background:var(--ab);color:#fff}
+.num.big{outline:3px solid var(--ab);outline-offset:1px}
+.rowlist{margin:6px 0 12px}
+.rowlist b{display:block;margin-bottom:2px;font-size:.92rem}
+
+/* ---------- Bulbs ---------- */
+.bulbs{display:flex;flex-wrap:wrap;align-items:center;gap:14px 26px;margin:6px 0 4px}
+.bulb{display:flex;align-items:center;gap:10px;font-size:.9rem}
+.lamp{width:46px;height:46px;border-radius:50%;background:#E1E6F1;border:3px solid #C9D1E3;transition:all .15s}
+.lamp.on.a{background:var(--a);border-color:#9DB6F5;box-shadow:0 0 0 6px #2457D633,0 0 22px #2457D688}
+.lamp.on.b{background:#FFA21F;border-color:#FFD08A;box-shadow:0 0 0 6px #FFA21F44,0 0 22px #FFA21F99}
+.tnow{margin-left:auto;font-weight:600}
+.both{color:var(--ab)}
+
+/* ---------- Arrays (faktor) ---------- */
+.arrs{display:flex;flex-wrap:wrap;gap:16px;margin:10px 0}
+.arr{max-width:100%;overflow-x:auto}
+.arr .dots{display:grid;gap:3px;margin-bottom:4px}
+.arr .dots i{width:10px;height:10px;border-radius:3px;background:var(--b)}
+.arr span{font-size:.85rem;font-weight:600}
+
+/* ---------- Table ---------- */
+.tw{overflow-x:auto;margin:12px 0}
+table{border-collapse:collapse;width:100%;min-width:520px;font-size:.95rem}
+th,td{border:1px solid var(--line);padding:9px 12px;text-align:left;vertical-align:top}
+th{background:#EEF2FA}
+th.k{background:var(--a-bg);color:var(--a-ink)}
+th.f{background:var(--b-bg);color:var(--b-ink)}
+.flow{display:flex;flex-wrap:wrap;gap:8px;align-items:stretch;margin:14px 0}
+.flow>div{flex:1 1 150px;padding:12px 14px;border-radius:12px;background:#EEF2FA}
+.flow .k{background:var(--a-bg)}
+.flow .f{background:var(--b-bg)}
+.flow .arrow{flex:0 0 auto;background:none;align-self:center;font-size:1.4rem;padding:0 2px}
+
+/* ---------- MC ---------- */
+.opts{display:grid;gap:8px}
+.opt{display:flex;gap:12px;align-items:center;text-align:left;width:100%;border:1.5px solid var(--line);background:#fff;border-radius:12px;padding:11px 14px;min-height:50px}
+.opt .L{flex:none;width:30px;height:30px;border-radius:8px;display:grid;place-items:center;background:#EBEFF8;font-weight:700;font-size:.85rem}
+.opt:hover:not(:disabled){border-color:var(--a)}
+.opt.picked{border-color:var(--a);background:var(--a-bg)}
+.opt.good{border-color:var(--ok);background:var(--ok-bg)}
+.opt.good .L{background:var(--ok);color:#fff}
+.opt.bad{border-color:var(--bad);background:var(--bad-bg)}
+.opt.bad .L{background:var(--bad);color:#fff}
+.opt.reveal{border-color:var(--ok);border-style:dashed}
+.opt:disabled{cursor:default}
+.fb{margin-top:12px;padding:12px 16px;border-radius:12px;font-size:.97rem}
+.fb.good{background:var(--ok-bg);color:#064D37}
+.fb.bad{background:var(--bad-bg);color:#7A1810}
+.fb.neutral{background:var(--a-bg);color:var(--a-ink)}
+.fb p:last-child{margin:0}
+.qchips{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:14px}
+.qc{width:40px;height:40px;border-radius:10px;border:1.5px solid var(--line);background:#fff;font-weight:700}
+.qc.done{background:var(--a-bg);border-color:var(--a)}
+.qc.cur{background:var(--a);border-color:var(--a);color:#fff}
+.qc:disabled{opacity:.4;cursor:not-allowed}
+.qc.wide{width:auto;padding:0 14px}
+.qmeta{color:var(--muted);font-size:.88rem;margin-bottom:8px}
+.qnav{display:flex;justify-content:space-between;gap:10px;margin-top:16px}
+
+/* ---------- Result ---------- */
+.result{text-align:center}
+.bigscore{font-size:clamp(3rem,10vw,4.5rem);font-weight:700;line-height:1;color:var(--ink)}
+.bigscore small{font-size:1.1rem;color:var(--muted);font-weight:500}
+.badge{display:inline-block;margin:10px 0;padding:6px 18px;border-radius:99px;font-weight:700}
+.badge.sb{background:var(--ok-bg);color:#064D37}
+.badge.b{background:var(--a-bg);color:var(--a-ink)}
+.badge.c{background:var(--b-bg);color:var(--b-ink)}
+.badge.pb{background:var(--bad-bg);color:#7A1810}
+.rng{width:100%;max-width:420px;margin:10px auto;min-width:0;font-size:.9rem}
+.rng td,.rng th{padding:6px 12px}
+.rng tr.me td{background:var(--a-bg);font-weight:700}
+.left{text-align:left}
+.rev li{margin-bottom:4px}
+
+/* ---------- Simulasi ---------- */
+.bags{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0}
+.bag{display:flex;flex-direction:column;align-items:center;padding:8px 12px;border-radius:12px;background:var(--b-bg);font-size:.88rem;font-weight:600;min-width:88px}
+.bag .bag-i{font-size:1.4rem}
+.bag.more{justify-content:center;background:#EBEFF8;color:var(--muted)}
+.sisa{padding:10px 14px;border-radius:12px;margin-top:8px}
+.sisa.ok{background:var(--ok-bg);color:#064D37}
+.sisa.no{background:#EEF2FA}
+input[type=range]{width:100%;max-width:520px;accent-color:var(--a);height:34px}
+.slider-row{display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.slider-row label{font-weight:600;min-width:110px}
+
+.dnd{display:grid;grid-template-columns:1fr;gap:14px;margin:10px 0}
+.pool,.zone{min-height:84px;border-radius:14px;padding:10px;display:flex;flex-wrap:wrap;gap:8px;align-content:flex-start}
+.pool{background:#EEF2FA;border:2px dashed #C3CCE0}
+.zones{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.zone{background:#fff;border:2px solid var(--line);flex-direction:column;flex-wrap:nowrap}
+.zone.y{border-color:var(--a)}
+.zone.n{border-color:var(--b)}
+.zone.hot{background:var(--ab-bg);border-color:var(--ab)}
+.zone h4{margin:0 0 4px}
+.zone .zi{display:flex;flex-wrap:wrap;gap:6px}
+.dcard{touch-action:none;user-select:none;-webkit-user-select:none;min-width:54px;height:50px;padding:0 14px;border-radius:12px;border:2px solid #AEB9D3;background:#fff;font-weight:700;font-size:1.1rem;cursor:grab}
+.dcard.sel{border-color:var(--ab);background:var(--ab-bg);box-shadow:0 0 0 3px #6B3FD433}
+.dcard.lifting{opacity:.35}
+.dcard.placed{cursor:default;border-color:var(--ok);background:var(--ok-bg);color:#064D37}
+.dcard.ghost{position:fixed;z-index:999;pointer-events:none;transform:translate(-50%,-60%) scale(1.08);box-shadow:0 10px 24px #0F1B2D44}
+.zonebtn{cursor:pointer}
+
+.mcols{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.mbtn{display:block;width:100%;text-align:left;border:1.5px solid var(--line);background:#fff;border-radius:12px;padding:12px 14px;margin-bottom:8px;font-size:.95rem}
+.mbtn:hover:not(:disabled){border-color:var(--a)}
+.mbtn.sel{border-color:var(--ab);background:var(--ab-bg)}
+.mbtn.done{border-color:var(--ok);background:var(--ok-bg);color:#064D37}
+.mbtn:disabled{cursor:default}
+.tagj{display:inline-block;margin-left:8px;padding:1px 10px;border-radius:99px;font-size:.78rem;font-weight:700;background:var(--ok);color:#fff}
+
+.bsitem{padding:14px 0;border-top:1px solid var(--line)}
+.bsitem:first-child{border-top:0}
+.bsbtns{display:flex;gap:8px;margin-top:8px}
+.bsbtns .btn{min-width:110px}
+.bsbtns .btn.ghost.picked{background:var(--a-bg);border-color:var(--a)}
+
+/* ---------- Refleksi ---------- */
+.checks{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:8px}
+.ck{display:flex;gap:10px;align-items:flex-start;padding:10px 12px;border:1.5px solid var(--line);border-radius:12px;background:#fff;cursor:pointer}
+.ck input{margin-top:5px;width:18px;height:18px;accent-color:var(--a);flex:none}
+.ck:has(input:checked){border-color:var(--a);background:var(--a-bg)}
+.scale{display:flex;flex-wrap:wrap;gap:8px}
+.scale label{flex:1 1 90px;text-align:center;padding:10px 6px;border:1.5px solid var(--line);border-radius:12px;background:#fff;cursor:pointer;font-size:.9rem}
+.scale label:has(input:checked){border-color:var(--a);background:var(--a-bg);font-weight:700}
+.scale input{position:absolute;opacity:0}
+.scale label:has(input:focus-visible){outline:3px solid #1D3FA8;outline-offset:2px}
+
+.sum{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.sum>div{padding:16px;border-radius:14px}
+.sum .k{background:var(--a-bg)}
+.sum .f{background:var(--b-bg)}
+.final{position:fixed;inset:0;z-index:100;background:#0F1B2DCC;display:grid;place-items:center;padding:20px}
+.final>div{background:#fff;border-radius:20px;max-width:520px;width:100%;padding:28px;text-align:center}
+
+#toast{position:fixed;left:50%;bottom:90px;transform:translate(-50%,20px);background:var(--ink);color:#fff;padding:11px 18px;border-radius:12px;font-weight:500;font-size:.92rem;opacity:0;pointer-events:none;transition:opacity .2s,transform .2s;z-index:200;max-width:92vw;text-align:center}
+#toast.on{opacity:1;transform:translate(-50%,0)}
+
+@media (max-width:900px){
+  .shell{display:block;padding-top:10px}
+  .menu{position:sticky;top:57px;z-index:30;display:flex;gap:6px;overflow-x:auto;max-height:none;background:var(--bg);padding:8px 0 10px;margin:0 -2px}
+  .mg,.score{display:none}
+  .mi{flex:none;width:auto;padding:5px 12px 5px 6px;border:1px solid var(--line);background:var(--surface);white-space:nowrap}
+  .mi.cur{border-color:var(--a)}
+  .prog{max-width:none}
+  .bar .tt small{display:none}
+}
+@media (max-width:620px){
+  .road,.sum,.zones,.mcols{grid-template-columns:1fr}
+  .zones{grid-template-columns:1fr 1fr}
+  .grid10{gap:3px}
+  .cell{font-size:.72rem;border-radius:6px}
+  .pager .mid{display:none}
+  .btn{padding:11px 16px}
+}
+@media (max-width:420px){.zones{grid-template-columns:1fr}}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+@media print{
+  .bar,.menu,.pager,.btn,#toast,.final,.qnav,.sub{display:none!important}
+  .shell{display:block;padding:0}
+  body{background:#fff}
+  .block{break-inside:avoid}
+}
+</style>
+</head>
+<body>
+<noscript><p style="margin:0;padding:16px;background:#FDEBE9;color:#B42318;font-family:sans-serif">Media ini membutuhkan JavaScript. Aktifkan JavaScript di browser Anda, lalu muat ulang halaman.</p></noscript>
+
+<header class="bar">
+  <svg width="44" height="30" viewBox="0 0 44 30" aria-hidden="true">
+    <circle cx="16" cy="15" r="13" fill="#2457D6" fill-opacity=".9"/>
+    <circle cx="28" cy="15" r="13" fill="#FFA21F" fill-opacity=".9"/>
+    <path d="M22 4.6a13 13 0 0 1 0 20.8 13 13 0 0 1 0-20.8z" fill="#6B3FD4"/>
+  </svg>
+  <div class="tt">KPK dan FPB<small>Matematika · Kelas 5</small></div>
+  <div class="prog" aria-live="polite">
+    <div class="lb"><span id="progLabel">Tahap 1 dari 9</span><span id="progPct">0%</span></div>
+    <div class="track"><div class="fill" id="progFill" style="width:0%"></div></div>
+  </div>
+</header>
+
+<div class="shell">
+  <nav class="menu" id="menu" aria-label="Tahapan belajar"></nav>
+  <div class="content">
+    <main id="stage" tabindex="-1"></main>
+    <div class="pager">
+      <button class="btn ghost" id="btnPrev" data-a="prev">Sebelumnya</button>
+      <span class="mid" id="pagerMid"></span>
+      <button class="btn" id="btnNext" data-a="next">Berikutnya</button>
+    </div>
+  </div>
+</div>
+<div id="toast" role="status" aria-live="polite"></div>
+<div id="overlay"></div>
+<noscript><p style="padding:20px">Media ini memerlukan JavaScript. Mohon aktifkan JavaScript di peramban Anda.</p></noscript>
+
+<script>
+/* =====================================================================
+   BAGIAN 1: MATEMATIKA DAN BANK SOAL (murni, tanpa DOM)
+   ===================================================================== */
+const gcd=(a,b)=>b?gcd(b,a%b):a;
+const lcm=(a,b)=>a/gcd(a,b)*b;
+const range=(a,b)=>Array.from({length:Math.max(0,b-a+1)},(_,i)=>a+i);
+const faktor=n=>range(1,n).filter(i=>n%i===0);
+function prima(n){const m={};let x=n;for(let p=2;p*p<=x;p++){while(x%p===0){m[p]=(m[p]||0)+1;x/=p}}if(x>1)m[x]=(m[x]||0)+1;return m}
+const SUP={2:'²',3:'³',4:'⁴',5:'⁵',6:'⁶'};
+function pStr(m){const k=Object.keys(m).map(Number).sort((a,b)=>a-b);if(!k.length)return '1';return k.map(p=>p+(m[p]>1?(SUP[m[p]]||'^'+m[p]):'')).join(' × ')}
+function pRaw(n){const m=prima(n),o=[];Object.keys(m).map(Number).sort((a,b)=>a-b).forEach(p=>{for(let i=0;i<m[p];i++)o.push(p)});return o.join(' × ')}
+function primaKpk(a,b){const A=prima(a),B=prima(b),r={};new Set([...Object.keys(A),...Object.keys(B)]).forEach(p=>{r[p]=Math.max(A[p]||0,B[p]||0)});return r}
+function primaFpb(a,b){const A=prima(a),B=prima(b),r={};Object.keys(A).forEach(p=>{if(B[p])r[p]=Math.min(A[p],B[p])});return r}
+const nilaiPrima=m=>Object.keys(m).reduce((t,p)=>t*Math.pow(+p,m[p]),1);
+function shuffle(a){const r=a.slice();for(let i=r.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[r[i],r[j]]=[r[j],r[i]]}return r}
+const kategori=s=>s>=90?'Sangat Baik':s>=75?'Baik':s>=60?'Cukup':'Perlu Bimbingan';
+const katKelas=s=>s>=90?'sb':s>=75?'b':s>=60?'c':'pb';
+
+/* ---- Asesmen awal (5 soal, diagnostik) ---- */
+const AWAL=[
+{id:'a1',t:'Kelipatan',q:'Manakah yang merupakan tiga kelipatan pertama dari 6?',o:['6, 12, 18','1, 2, 3, 6','6, 7, 8','12, 24, 36'],a:0,
+ hint:'Kelipatan 6 didapat dari 6 × 1, 6 × 2, 6 × 3, dan seterusnya. Coba hitung, lalu bandingkan dengan pilihanmu.'},
+{id:'a2',t:'Faktor',q:'Faktor dari 12 adalah ...',o:['1, 2, 3, 4, 6, 12','12, 24, 36, 48','1, 2, 3, 4, 6','2, 3, 4, 6, 12'],a:0,
+ hint:'Faktor adalah bilangan yang habis membagi 12. Coba bagi 12 dengan 1, 2, 3, ... dan lihat mana yang tidak bersisa. Jangan lupa 1 dan 12 itu sendiri.'},
+{id:'a3',t:'Faktor persekutuan',q:'Selain 1, bilangan yang menjadi faktor dari 15 sekaligus faktor dari 20 adalah ...',o:['3','4','5','10'],a:2,
+ hint:'Tulis faktor 15 dan faktor 20 secara terpisah, lalu cari bilangan yang muncul di kedua daftar.'},
+{id:'a4',t:'KPK',q:'Bus A berangkat dari terminal setiap 4 menit dan bus B setiap 6 menit. Keduanya berangkat bersamaan pukul 07.00. Berapa menit kemudian keduanya berangkat bersamaan lagi?',o:['2 menit','10 menit','12 menit','24 menit'],a:2,
+ hint:'Tulis jam keberangkatan bus A dan bus B dalam menit: 4, 8, 12, ... dan 6, 12, ... Cari saat pertama keduanya sama.'},
+{id:'a5',t:'FPB',q:'Ibu punya 8 apel dan 12 jeruk. Buah dibagi ke beberapa kantong. Setiap kantong berisi apel dan jeruk sama banyak, dan tidak ada buah tersisa. Paling banyak ada berapa kantong?',o:['2','4','8','24'],a:1,
+ hint:'Banyak kantong harus membagi 8 dan juga membagi 12 tanpa sisa. Cari yang paling besar.'}
+];
+
+/* ---- Pertanyaan cek pemahaman materi (boleh mencoba ulang) ---- */
+const CEK=[
+{id:'c1',t:'Kelipatan',q:'Tiga kelipatan pertama dari 7 adalah ...',o:['7, 14, 21','1, 7, 14','7, 17, 27','14, 21, 28'],a:0,
+ why:'7 × 1 = 7, 7 × 2 = 14, 7 × 3 = 21.',hint:'Kalikan 7 dengan 1, 2, dan 3.'},
+{id:'c2',t:'Faktor',q:'Manakah yang BUKAN faktor dari 20?',o:['4','5','8','10'],a:2,
+ why:'20 ÷ 8 = 2 sisa 4, jadi 8 bukan faktor 20. Faktor 20: 1, 2, 4, 5, 10, 20.',hint:'Bagi 20 dengan tiap pilihan. Faktor tidak meninggalkan sisa.'},
+{id:'c3',t:'KPK',q:'KPK dari 6 dan 9 adalah ...',o:['3','18','36','54'],a:1,
+ why:'Kelipatan 6: 6, 12, 18 ... Kelipatan 9: 9, 18 ... Kelipatan persekutuan terkecil adalah 18.',hint:'Tulis kelipatan 6 dan kelipatan 9 sampai ada angka yang sama.'},
+{id:'c4',t:'FPB',q:'FPB dari 16 dan 24 adalah ...',o:['4','8','48','2'],a:1,
+ why:'Faktor 16: 1, 2, 4, 8, 16. Faktor 24: 1, 2, 3, 4, 6, 8, 12, 24. Faktor persekutuan terbesar adalah 8.',hint:'Tulis semua faktor 16 dan 24, lalu ambil yang sama dan paling besar.'},
+{id:'c5',t:'Memilih KPK atau FPB',q:'Pak Dedi punya 24 kelereng merah dan 40 kelereng biru. Ia membagi semuanya ke dalam kantong sama isi, dengan kantong sebanyak mungkin. Cara yang tepat adalah ...',
+ o:['Memakai FPB, karena membagi sama rata sebanyak mungkin','Memakai KPK, karena mencari kapan bertemu lagi','Menjumlahkan 24 + 40','Mengalikan 24 × 40'],a:0,
+ why:'Membagi sama rata dengan kantong sebanyak mungkin berarti mencari faktor persekutuan terbesar, yaitu FPB (24 dan 40 → 8).',hint:'Apakah soal ini bertanya tentang kejadian yang bertemu lagi, atau tentang membagi sama rata?'}
+];
+
+/* ---- Kuis interaktif (10 soal HOTS) ---- */
+const KUIS=[
+{id:'k1',t:'KPK, penalaran',q:'Lampu merah menyala setiap 6 detik dan lampu hijau setiap 9 detik. Keduanya menyala bersamaan pada detik ke-0. Dalam 40 detik pertama (setelah detik ke-0), berapa kali keduanya menyala bersamaan?',o:['1 kali','2 kali','3 kali','6 kali'],a:1,
+ why:'KPK 6 dan 9 adalah 18. Keduanya bersamaan pada detik 18 dan 36. Detik 54 sudah melewati 40. Jadi ada 2 kali.'},
+{id:'k2',t:'FPB, penerapan',q:'Pak Ali memiliki 24 bolpoin dan 36 buku. Ia membuat paket hadiah sama isi tanpa sisa, dengan paket sebanyak mungkin. Isi setiap paket adalah ...',o:['2 bolpoin dan 3 buku','3 bolpoin dan 2 buku','6 bolpoin dan 6 buku','12 bolpoin dan 12 buku'],a:0,
+ why:'FPB 24 dan 36 adalah 12, jadi ada 12 paket. Tiap paket: 24 ÷ 12 = 2 bolpoin dan 36 ÷ 12 = 3 buku.'},
+{id:'k3',t:'FPB, analisis',q:'Lantai berukuran 120 cm × 180 cm akan ditutup ubin persegi sama besar tanpa dipotong, dengan ubin sebesar mungkin. Panjang sisi ubin adalah ...',o:['30 cm','40 cm','60 cm','90 cm'],a:2,
+ why:'FPB 120 dan 180 adalah 60. Ubin 60 cm: 120 ÷ 60 = 2 baris dan 180 ÷ 60 = 3 kolom. Ubin 30 cm juga muat, tetapi bukan yang terbesar. Ubin 40 cm dan 90 cm tidak muat tepat.'},
+{id:'k4',t:'Mengevaluasi jawaban',q:'Dina menulis: “KPK dari 8 dan 12 adalah 4, karena 4 membagi 8 dan 12.” Penilaian yang paling tepat terhadap jawaban Dina adalah ...',o:['Tepat, 4 adalah KPK-nya','Kurang tepat, 4 adalah FPB; KPK-nya 24','Kurang tepat, KPK-nya 12','Kurang tepat, KPK-nya 96'],a:1,
+ why:'Bilangan terbesar yang membagi 8 dan 12 adalah FPB, yaitu 4. KPK adalah kelipatan bersama terkecil: kelipatan 8 (8, 16, 24) dan kelipatan 12 (12, 24), jadi KPK = 24.'},
+{id:'k5',t:'KPK tiga bilangan',q:'Rudi ke perpustakaan setiap 4 hari, Sari setiap 6 hari, dan Tono setiap 9 hari. Hari ini mereka bertiga bertemu. Berapa hari lagi mereka bertiga bertemu bersama?',o:['18 hari','24 hari','36 hari','54 hari'],a:2,
+ why:'4 = 2², 6 = 2 × 3, 9 = 3². Ambil pangkat tertinggi tiap faktor prima: 2² × 3² = 36. Angka 18 tidak habis dibagi 4, angka 24 tidak habis dibagi 9, dan 54 tidak habis dibagi 4.'},
+{id:'k6',t:'Memilih KPK atau FPB',q:'Soal manakah yang diselesaikan dengan FPB?',o:['Dua kapal berangkat dari pelabuhan yang sama. Kapan berangkat bersamaan lagi?','Membagi 30 permen dan 45 cokelat ke bungkusan sama isi, dengan bungkusan sebanyak mungkin','Dua lampu menyala bersamaan. Kapan menyala bersamaan lagi?','Dua petugas piket bertemu hari ini. Kapan bertemu lagi?'],a:1,
+ why:'FPB dipakai untuk membagi atau memotong menjadi bagian sama isi atau sama panjang yang sebanyak atau sebesar mungkin. Tiga soal lain menanyakan kapan kejadian berulang bersamaan, yaitu KPK.'},
+{id:'k7',t:'Penalaran bilangan',q:'FPB dua bilangan adalah 6 dan KPK-nya 36. Salah satu bilangan itu adalah 12. Bilangan yang lain adalah ...',o:['6','18','24','36'],a:1,
+ why:'Hasil kali kedua bilangan sama dengan FPB × KPK = 6 × 36 = 216. Bilangan lain = 216 ÷ 12 = 18. Cek: FPB 12 dan 18 adalah 6 dan KPK-nya 36.'},
+{id:'k8',t:'FPB, dua langkah',q:'Pak Budi punya tali 48 m dan 72 m. Kedua tali dipotong menjadi potongan sama panjang, sepanjang mungkin, tanpa sisa. Berapa banyak potongan seluruhnya?',o:['3 potong','5 potong','24 potong','120 potong'],a:1,
+ why:'FPB 48 dan 72 adalah 24, jadi tiap potong 24 m. Tali 48 m menjadi 2 potong dan tali 72 m menjadi 3 potong. Totalnya 5 potong.'},
+{id:'k9',t:'KPK, waktu',q:'Bus A berangkat setiap 12 menit dan bus B setiap 15 menit. Keduanya berangkat bersamaan pukul 06.00. Pukul berapa mereka berangkat bersamaan lagi?',o:['06.27','06.30','07.00','07.30'],a:2,
+ why:'12 = 2² × 3 dan 15 = 3 × 5. KPK = 2² × 3 × 5 = 60 menit, jadi bersamaan lagi pukul 07.00.'},
+{id:'k10',t:'Faktor persekutuan, strategi',q:'Rina ingin membuat paket hadiah dari 18 stiker dan 27 pensil. Setiap paket harus sama isi dan tidak ada yang tersisa. Banyak paket yang mungkin dibuat adalah ...',o:['1, 3, atau 9 paket','2, 3, atau 9 paket','1, 3, 6, atau 9 paket','3, 9, atau 18 paket'],a:0,
+ why:'Banyak paket harus menjadi faktor persekutuan 18 dan 27. Faktor 18: 1, 2, 3, 6, 9, 18. Faktor 27: 1, 3, 9, 27. Faktor persekutuan: 1, 3, 9.'}
+];
+
+/* ---- Asesmen akhir: 10 pilihan ganda + 2 uraian ---- */
+const AKHIR=[
+{id:'f1',t:'KPK',q:'Dua lampu hias menyala setiap 10 detik dan setiap 15 detik. Keduanya menyala bersamaan pada detik ke-0. Setelah berapa detik keduanya menyala bersamaan lagi?',o:['5 detik','25 detik','30 detik','150 detik'],a:2,
+ why:'KPK 10 dan 15 adalah 30. Angka 5 adalah FPB-nya, 25 adalah jumlahnya, dan 150 adalah hasil kalinya (bukan yang terkecil).'},
+{id:'f2',t:'FPB',q:'Ibu membagi 20 kue cokelat dan 30 kue keju ke dalam kotak sama isi tanpa sisa, dengan kotak sebanyak mungkin. Banyak kotak yang dibutuhkan adalah ...',o:['5 kotak','10 kotak','50 kotak','60 kotak'],a:1,
+ why:'FPB 20 dan 30 adalah 10. Tiap kotak berisi 2 kue cokelat dan 3 kue keju. Lima kotak juga tanpa sisa, tetapi bukan yang terbanyak.'},
+{id:'f3',t:'KPK tiga bilangan',q:'Tiga lampu menyala setiap 2, 3, dan 4 menit. Ketiganya menyala bersamaan pukul 19.00. Pukul berapa ketiganya menyala bersamaan lagi?',o:['19.04','19.09','19.12','19.24'],a:2,
+ why:'2 = 2, 3 = 3, 4 = 2². KPK = 2² × 3 = 12 menit, jadi pukul 19.12. Angka 24 adalah hasil kali 2 × 3 × 4, bukan yang terkecil.'},
+{id:'f4',t:'FPB, dua langkah',q:'Lantai berukuran 90 cm × 150 cm ditutup ubin persegi sama besar tanpa dipotong, dengan ubin sebesar mungkin. Banyak ubin yang diperlukan adalah ...',o:['5 ubin','15 ubin','30 ubin','45 ubin'],a:1,
+ why:'FPB 90 dan 150 adalah 30, jadi sisi ubin 30 cm. 90 ÷ 30 = 3 baris dan 150 ÷ 30 = 5 kolom, sehingga 3 × 5 = 15 ubin.'},
+{id:'f5',t:'KPK dan FPB',q:'Pernyataan yang tepat tentang KPK dan FPB dari 8 dan 20 adalah ...',o:['KPK = 4 dan FPB = 40','KPK = 40 dan FPB = 4','KPK = 160 dan FPB = 4','KPK = 40 dan FPB = 2'],a:1,
+ why:'Kelipatan 8: 8, 16, 24, 32, 40. Kelipatan 20: 20, 40. KPK = 40. Faktor 8: 1, 2, 4, 8. Faktor 20: 1, 2, 4, 5, 10, 20. FPB = 4.'},
+{id:'f6',t:'KPK, kalender',q:'Andi menabung setiap 6 hari sekali dan Beni setiap 8 hari sekali. Keduanya menabung bersama pada tanggal 1 Maret. Kapan mereka menabung bersama lagi?',o:['3 Maret','15 Maret','25 Maret','18 April'],a:2,
+ why:'KPK 6 dan 8 adalah 24. Satu Maret ditambah 24 hari jatuh pada 25 Maret.'},
+{id:'f7',t:'Memilih KPK atau FPB',q:'Situasi yang diselesaikan dengan KPK adalah ...',o:['Membagi 36 pensil dan 48 penghapus ke tas sama isi, dengan tas sebanyak mungkin','Dua kereta berangkat bersamaan hari ini. Kapan berangkat bersamaan lagi?','Memotong dua tali menjadi potongan sama panjang yang terpanjang','Menutup lantai dengan ubin persegi terbesar tanpa sisa'],a:1,
+ why:'KPK dipakai untuk kejadian yang berulang dan bertemu lagi. Tiga situasi lain adalah membagi atau memotong sama rata sebesar atau sebanyak mungkin, yaitu FPB.'},
+{id:'f8',t:'FPB, penerapan',q:'Bu Sari mengemas 36 permen mint dan 60 permen jeruk ke dalam bungkus sama isi tanpa sisa, dengan bungkus sebanyak mungkin. Banyak permen jeruk dalam setiap bungkus adalah ...',o:['3','5','12','60'],a:1,
+ why:'FPB 36 dan 60 adalah 12, jadi ada 12 bungkus. Tiap bungkus berisi 36 ÷ 12 = 3 permen mint dan 60 ÷ 12 = 5 permen jeruk.'},
+{id:'f9',t:'Teliti memeriksa',q:'Rani mencari KPK 12 dan 18 dengan faktorisasi prima: 12 = 2² × 3 dan 18 = 2 × 3². Ia menulis KPK = 2 × 3 = 6. Kesalahan Rani adalah ...',o:['Seharusnya mengambil pangkat tertinggi: 2² × 3² = 36','Seharusnya menjumlahkan: 12 + 18 = 30','Seharusnya 2² × 3 = 12','Tidak ada kesalahan'],a:0,
+ why:'Untuk KPK, ambil semua faktor prima dengan pangkat tertinggi: 2² × 3² = 36. Hasil Rani (6) sebenarnya FPB, karena ia mengambil pangkat terendah.'},
+{id:'f10',t:'Faktor persekutuan',q:'Banyak faktor persekutuan dari 24 dan 36 adalah ...',o:['4','5','6','12'],a:2,
+ why:'Faktor 24: 1, 2, 3, 4, 6, 8, 12, 24. Faktor 36: 1, 2, 3, 4, 6, 9, 12, 18, 36. Yang sama: 1, 2, 3, 4, 6, 12, yaitu 6 faktor. Angka 12 adalah FPB, bukan banyaknya.'}
+];
+const URAIAN=[
+{id:'u1',q:'Bu Tani punya 18 mangga dan 24 jeruk. Ia ingin membuat bingkisan sama isi tanpa sisa, dengan bingkisan sebanyak mungkin. Tuliskan langkah-langkahmu untuk menentukan banyak bingkisan dan isi tiap bingkisan.',
+ kunci:'Membagi sama rata sebanyak mungkin berarti FPB. Faktor 18: 1, 2, 3, 6, 9, 18. Faktor 24: 1, 2, 3, 4, 6, 8, 12, 24. Faktor persekutuan terbesar = 6, jadi ada 6 bingkisan. Tiap bingkisan berisi 18 ÷ 6 = 3 mangga dan 24 ÷ 6 = 4 jeruk.',
+ rubrik:['Memilih FPB dan memberi alasan (membagi sama rata sebanyak mungkin).','Menemukan FPB = 6 dengan langkah yang benar (daftar faktor atau faktorisasi prima).','Menyebutkan isi tiap bingkisan: 3 mangga dan 4 jeruk.']},
+{id:'u2',q:'Pak Dani jaga malam setiap 6 hari sekali dan Pak Eko setiap 8 hari sekali. Hari ini mereka jaga bersama. Kapan mereka jaga bersama lagi? Jelaskan mengapa kamu memakai KPK, bukan FPB.',
+ kunci:'Pertanyaannya tentang bertemu kembali, jadi memakai KPK. Kelipatan 6: 6, 12, 18, 24 ... Kelipatan 8: 8, 16, 24 ... KPK = 24, sehingga mereka jaga bersama lagi 24 hari dari sekarang. FPB (2) dipakai untuk membagi sama rata, bukan untuk mencari waktu yang berulang.',
+ rubrik:['Memilih KPK dengan alasan kejadian berulang atau bertemu lagi.','Menemukan KPK = 24 dengan langkah yang benar.','Menuliskan kesimpulan dengan satuan: 24 hari lagi.']}
+];
+
+/* ---- Simulasi ---- */
+const LAMP_TASKS=[{a:3,b:4,ans:12},{a:6,b:8,ans:24},{a:5,b:10,ans:10}];
+const KANTONG=[{A:12,J:18,f:6},{A:20,J:30,f:10},{A:14,J:21,f:7}];
+const DND=[
+ {judul:'Faktor dari 24',N:24,cards:[2,3,5,6,7,8,9,12,16,24],yes:'Faktor dari 24',no:'Bukan faktor dari 24',
+  isYes:c=>24%c===0,
+  hint:(c,y)=>y?`${c} adalah faktor 24, sebab 24 ÷ ${c} = ${24/c} tanpa sisa.`:`${c} bukan faktor 24: 24 ÷ ${c} = ${Math.floor(24/c)} sisa ${24%c}.`},
+ {judul:'Kelipatan 6',N:6,cards:[6,9,12,16,18,20,24,30,32,36],yes:'Kelipatan 6',no:'Bukan kelipatan 6',
+  isYes:c=>c%6===0,
+  hint:(c,y)=>y?`${c} adalah kelipatan 6, sebab 6 × ${c/6} = ${c}.`:`${c} bukan kelipatan 6: ${c} ÷ 6 = ${Math.floor(c/6)} sisa ${c%6}.`}
+];
+const MATCH=[
+ {id:'m1',j:'KPK',s:'Lampu menyala tiap 5 detik dan tiap 10 detik, mulai bersamaan. Setelah berapa detik menyala bersamaan lagi?',r:'10 detik'},
+ {id:'m2',j:'FPB',s:'15 buku dan 20 pensil dibagi ke paket sama isi, dengan paket sebanyak mungkin. Berapa paket?',r:'5 paket'},
+ {id:'m3',j:'KPK',s:'Rudi berenang tiap 3 hari dan Sinta tiap 4 hari. Hari ini mereka berenang bersama. Bertemu lagi setelah ...',r:'12 hari'},
+ {id:'m4',j:'FPB',s:'Pita 18 m dan 24 m dipotong sama panjang, sepanjang mungkin. Panjang tiap potongan?',r:'6 m'}
+];
+const BS=[
+ {t:'KPK dari 4 dan 6 adalah 24.',a:false,e:'Kelipatan 4: 4, 8, 12, ... Kelipatan 6: 6, 12, ... Kelipatan persekutuan pertama adalah 12, jadi KPK = 12. Angka 24 memang kelipatan persekutuan, tetapi bukan yang terkecil.'},
+ {t:'FPB dari dua bilangan tidak pernah lebih besar daripada bilangan yang terkecil.',a:true,e:'FPB harus membagi kedua bilangan, sehingga tidak mungkin melebihi bilangan yang terkecil. Contoh: FPB 12 dan 18 adalah 6, lebih kecil dari 12.'},
+ {t:'Bilangan 1 adalah faktor dari setiap bilangan bulat positif.',a:true,e:'Setiap bilangan habis dibagi 1. Karena itu FPB dua bilangan paling kecil adalah 1.'},
+ {t:'KPK dua bilangan selalu lebih kecil daripada kedua bilangan itu.',a:false,e:'KPK adalah kelipatan, jadi tidak pernah lebih kecil daripada bilangan yang terbesar. Contoh: KPK 4 dan 6 adalah 12.'},
+ {t:'Karena 10 adalah kelipatan 5, maka KPK dari 5 dan 10 adalah 10.',a:true,e:'Kelipatan 10 adalah 10, 20, ... dan 10 juga kelipatan 5, jadi 10 adalah kelipatan persekutuan terkecil.'},
+ {t:'FPB dari 7 dan 9 adalah 1.',a:true,e:'Faktor 7: 1, 7. Faktor 9: 1, 3, 9. Satu-satunya faktor persekutuan adalah 1.'}
+];
+const REFL_TOPIK=['Arti kelipatan','Arti faktor','Mencari KPK','Mencari FPB','Memilih KPK atau FPB pada soal cerita','Menyelesaikan soal dengan teliti'];
+const BANTU=['Simulasi lampu','Bagi kantong','Menyeret kartu','Mencocokkan','Benar atau salah','Kuis','Penjelasan materi'];
+
+/* peta soal dan urutan opsi acak (sekali per sesi) */
+const QMAP={};
+[...AWAL,...CEK,...KUIS,...AKHIR].forEach(q=>{q.perm=shuffle(q.o.map((_,i)=>i));QMAP[q.id]=q});
+
+/* =====================================================================
+   BAGIAN 2: ANTARMUKA
+   ===================================================================== */
+if(typeof document!=='undefined')(function(){
+const $=(s,r)=>(r||document).querySelector(s);
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+
+const STAGES=[
+ {n:'Halaman Pembuka',f:0},{n:'Apersepsi',f:0},{n:'Asesmen Awal',f:0},{n:'Materi Pokok',f:0},
+ {n:'Simulasi Interaktif',f:1},{n:'Kuis Interaktif',f:1},{n:'Asesmen Akhir',f:1},
+ {n:'Refleksi',f:2},{n:'Penutup',f:2}];
+const FASE=['Memahami','Mengaplikasi','Merefleksi'];
+
+const S={stage:0,max:0,warn:-1,selesai:false,
+ pred:{lamp:null,kantong:null,alasan:'',pengalaman:''},lampT:0,
+ ans:{},
+ mat:{sub:0,kn:3,kcell:null,fn:12,ka:4,kb:10,fa:18,fb:30},
+ sim:{tab:0,done:{lamp:false,kantong:false,dnd:false,match:false,bs:false},
+  lamp:{tab:0,a:4,b:9,t:0,ok:{},msg:{},cara:''},
+  kantong:{tab:0,k:1,ok:{},msg:{}},
+  dnd:{round:0,placed:{},sel:null,wrong:0,msg:'',doneR:{}},
+  match:{sel:null,matched:{},wrong:0,msg:'',order:shuffle(MATCH.map(m=>m.id))},
+  bs:{ans:{}}},
+ kuis:{i:0},akhir:{i:0},u:{u1:'',u2:''},ukey:{},rub:{u1:[false,false,false],u2:[false,false,false]},
+ refl:{paham:[],sulit:[],bantu:'',pakai:'',lanjut:'',teliti:null,mandiri:null}
+};
+
+/* ---------- utilitas ---------- */
+let timer=null;
+const stopTimer=()=>{if(timer){clearInterval(timer);timer=null}};
+let toastT;
+function ringkasanHTML(){
+  const css=[...document.querySelectorAll('style')].map(x=>x.textContent).join('\n');
+  const st=$('#stage').cloneNode(true);
+  st.querySelectorAll('button,.btnrow').forEach(x=>x.remove());
+  return '<!DOCTYPE html><html lang="id"><head><meta charset="utf-8"><title>Ringkasan KPK dan FPB</title><style>'+css+'</style></head><body><div style="max-width:820px;margin:0 auto;padding:20px">'+st.innerHTML+'</div><script>window.onload=function(){setTimeout(function(){window.print()},400)}<\/script></body></html>';
+}
+function toast(m){const t=$('#toast');t.textContent=m;t.classList.add('on');clearTimeout(toastT);toastT=setTimeout(()=>t.classList.remove('on'),3600)}
+function setPath(p,v){const k=p.split('.');let o=S;for(let i=0;i<k.length-1;i++)o=o[k[i]];o[k[k.length-1]]=v}
+function getPath(p){return p.split('.').reduce((o,k)=>o[k],S)}
+const stepper=(act,k,val,min,max,label)=>`<div class="stepper" role="group" aria-label="${label}"><button type="button" data-a="${act}" data-k="${k}" data-v="${val-1}" ${val<=min?'disabled':''} aria-label="Kurangi ${label}">−</button><output>${val}</output><button type="button" data-a="${act}" data-k="${k}" data-v="${val+1}" ${val>=max?'disabled':''} aria-label="Tambah ${label}">+</button></div>`;
+function fz(n){const raw=pRaw(n),st=pStr(prima(n));if(raw===String(n))return `${n} (bilangan prima)`;return `${n} = ${raw}`+(st!==raw?` = ${st}`:'')}
+const nums=(arr,hi,big)=>arr.map(x=>`<span class="num ${x===hi?'cab':''} ${x===big?'big':''}">${x}</span>`).join('');
+
+/* ---------- skor ---------- */
+const nBenar=list=>list.filter(q=>S.ans[q.id]&&S.ans[q.id].ok).length;
+const nJawab=list=>list.filter(q=>S.ans[q.id]).length;
+const skorKuis=()=>nBenar(KUIS)*10;
+const skorAkhir=()=>nBenar(AKHIR)*10;
+
+/* ---------- komponen pilihan ganda ---------- */
+function mcHTML(q,mode){
+  const a=S.ans[q.id];
+  const locked=a&&(mode!=='cek'||a.ok);
+  let h=`<p class="qtext">${esc(q.q)}</p><div class="opts" role="group" aria-label="Pilihan jawaban">`;
+  q.perm.forEach((oi,pos)=>{
+    let c='opt';
+    if(a&&a.sel===oi){c+=' picked';if(mode!=='awal')c+=a.ok?' good':' bad'}
+    if(mode!=='awal'&&locked&&a&&!a.ok&&oi===q.a)c+=' reveal';
+    h+=`<button type="button" class="${c}" data-a="pick" data-q="${q.id}" data-m="${mode}" data-v="${oi}" ${locked?'disabled':''}><span class="L">${'ABCD'[pos]}</span><span>${esc(q.o[oi])}</span></button>`;
+  });
+  h+='</div>';
+  if(a){
+    if(mode==='awal')h+=`<div class="fb neutral"><p><b>Jawabanmu sudah dicatat.</b> ${esc(q.hint)}</p></div>`;
+    else if(mode==='cek')h+=a.ok?`<div class="fb good"><p><b>Tepat!</b> ${esc(q.why)}</p></div>`:`<div class="fb bad"><p><b>Belum tepat, ayo coba lagi.</b> ${esc(q.hint)}</p></div>`;
+    else h+=`<div class="fb ${a.ok?'good':'bad'}"><p><b>${a.ok?'Tepat!':'Belum tepat.'}</b> ${esc(q.why)}</p></div>`;
+  }
+  return h;
+}
+function chipsHTML(key,n,cur,list){
+  let h='<div class="qchips">';
+  for(let i=0;i<n;i++){
+    const q=list[i];const dn=q&&S.ans[q.id];
+    h+=`<button type="button" class="qc ${i===cur?'cur':''} ${dn?'done':''}" data-a="qgo" data-k="${key}" data-v="${i}" aria-label="Soal ${i+1}${dn?', sudah dijawab':''}">${i+1}</button>`;
+  }
+  return h+'</div>';
+}
+
+/* ---------- lampu & kantong ---------- */
+function lampArea(a,b,t,N){
+  const onA=t>0&&t%a===0,onB=t>0&&t%b===0;
+  const bulbs=`<div class="bulbs"><div class="bulb"><div class="lamp a ${onA?'on':''}"></div><span>Lampu biru<br><small>tiap ${a} detik</small></span></div><div class="bulb"><div class="lamp b ${onB?'on':''}"></div><span>Lampu oranye<br><small>tiap ${b} detik</small></span></div><div class="tnow">Detik ke-${t}${onA&&onB?' <span class="both">Menyala bersamaan!</span>':''}</div></div>`;
+  const cells=range(1,N).map(n=>{let c='cell';if(n<=t){const x=n%a===0,y=n%b===0;c+=x&&y?' cab':x?' ca':y?' cb':''}if(n===t)c+=' now';return `<span class="${c}">${n}</span>`}).join('');
+  return bulbs+`<div class="grid10" role="img" aria-label="Tabel detik 1 sampai ${N}">${cells}</div><div class="legend"><span><i style="background:var(--a-cell)"></i>hanya lampu biru</span><span><i style="background:var(--b-cell)"></i>hanya lampu oranye</span><span><i style="background:var(--ab)"></i>menyala bersamaan</span></div>`;
+}
+function kantongArea(T,k){
+  const pa=Math.floor(T.A/k),pj=Math.floor(T.J/k),sa=T.A%k,sj=T.J%k;
+  const ok=sa===0&&sj===0&&pa>0&&pj>0;
+  const bags=Math.min(k,12);
+  let h='<div class="bags">';
+  for(let i=0;i<bags;i++)h+=`<div class="bag"><span class="bag-i">🛍️</span><span>🍎 ${pa}</span><span>🍊 ${pj}</span></div>`;
+  if(k>12)h+=`<div class="bag more">+ ${k-12} kantong lagi</div>`;
+  h+='</div>';
+  h+=`<div class="sisa ${ok?'ok':'no'}"><b>Tiap kantong:</b> ${pa} apel dan ${pj} jeruk. <b>Sisa:</b> ${sa} apel dan ${sj} jeruk. ${ok?'Tidak ada sisa ✔':'Masih ada sisa, atau kantong belum terisi lengkap.'}</div>`;
+  return h;
+}
+
+/* =====================================================================
+   TAHAP 1: HALAMAN PEMBUKA
+   ===================================================================== */
+function heroSVG(){
+  const x0=44,dx=50,y=104,X=n=>x0+n*dx;
+  let s=`<svg viewBox="0 0 700 215" role="img" aria-label="Garis bilangan 0 sampai 12. Lompatan 2 berwarna biru dan lompatan 3 berwarna oranye bertemu di 6 dan 12.">`;
+  s+=`<line x1="${X(0)-16}" y1="${y}" x2="${X(12)+16}" y2="${y}" stroke="#0F1B2D" stroke-width="3" stroke-linecap="round"/>`;
+  for(let n=0;n<=12;n++){
+    const hit=n>0&&n%6===0;
+    s+=`<line x1="${X(n)}" y1="${y-7}" x2="${X(n)}" y2="${y+7}" stroke="#0F1B2D" stroke-width="2"/>`;
+    s+=`<text x="${X(n)}" y="${y+26}" text-anchor="middle" font-size="15" font-weight="${hit?700:500}" fill="${hit?'#6B3FD4':'#53627A'}" font-family="Lexend,sans-serif">${n}</text>`;
+  }
+  for(let n=0;n<12;n+=2)s+=`<path d="M${X(n)} ${y-8} Q ${(X(n)+X(n+2))/2} ${y-78} ${X(n+2)} ${y-8}" fill="none" stroke="#2457D6" stroke-width="4" stroke-linecap="round"/>`;
+  for(let n=0;n<12;n+=3)s+=`<path d="M${X(n)} ${y+40} Q ${(X(n)+X(n+3))/2} ${y+120} ${X(n+3)} ${y+40}" fill="none" stroke="#D96F00" stroke-width="4" stroke-linecap="round"/>`;
+  [6,12].forEach(n=>{s+=`<circle cx="${X(n)}" cy="${y}" r="11" fill="#6B3FD4"/><text x="${X(n)}" y="${y-62}" text-anchor="middle" font-size="13" font-weight="600" fill="#6B3FD4" font-family="Lexend,sans-serif">bertemu!</text>`});
+  s+=`<text x="${X(0)}" y="22" font-size="14" font-weight="600" fill="#2457D6" font-family="Lexend,sans-serif">Lompat 2 petak</text><text x="${X(0)}" y="208" font-size="14" font-weight="600" fill="#D96F00" font-family="Lexend,sans-serif">Lompat 3 petak</text></svg>`;
+  return s;
+}
+function sPembuka(){
+  return `
+  <section class="hero">
+    <h2><span class="t1">Media Pembelajaran Interaktif</span><span class="t2">Materi KPK dan FPB untuk Masalah Sehari-hari</span></h2>
+    <p class="lead">Belajar menerapkan KPK dan FPB untuk menyelesaikan masalah nyata secara kontekstual, dengan mandiri dan teliti.</p>
+    ${heroSVG()}
+  </section>
+  <section class="block goal">
+    <h3>Tujuan belajarku</h3>
+    <ul>
+      <li>Aku bisa menjelaskan arti kelipatan, faktor, KPK, dan FPB.</li>
+      <li>Aku bisa memilih memakai KPK atau FPB untuk soal cerita.</li>
+      <li>Aku bisa menyelesaikan masalah sehari-hari dengan mandiri dan teliti.</li>
+    </ul>
+    <p class="muted" style="margin-top:12px">Perkiraan waktu: 3 × 35 menit. Kamu boleh belajar sedikit demi sedikit.</p>
+  </section>
+  <div class="road">
+    <div><b>1. Memahami</b><span>Mengamati, menebak, dan belajar konsep.</span></div>
+    <div><b>2. Mengaplikasi</b><span>Simulasi, permainan, kuis, dan asesmen.</span></div>
+    <div><b>3. Merefleksi</b><span>Melihat kembali apa yang sudah kupelajari.</span></div>
+  </div>
+  <button class="btn big" type="button" data-a="next">Mulai Belajar</button>`;
+}
+
+/* =====================================================================
+   TAHAP 2: APERSEPSI
+   ===================================================================== */
+function chipSet(k,list,cur){return `<div class="chips" role="group">`+list.map(l=>`<button type="button" class="chip ${cur===l?'on':''}" data-a="pred" data-k="${k}" data-v="${esc(l)}">${esc(l)}</button>`).join('')+'</div>'}
+function sApersepsi(){
+  const p=S.pred;
+  return `
+  <div class="stage-head"><h2>Ayo Amati!</h2><p>Perhatikan dua kejadian di sekitar kita. Tebakanmu tidak harus tepat. Yang penting kamu berani berpikir dan mencoba.</p></div>
+  <section class="block">
+    <h3>1. Dua lampu hias</h3>
+    <p>Lampu <span class="ta">biru</span> menyala setiap 3 detik. Lampu <span class="tb">oranye</span> menyala setiap 4 detik. Keduanya mulai menyala bersamaan di detik ke-0. Geser pengatur waktu untuk mengamati.</p>
+    <div class="slider-row"><label for="lampT">Detik ke-<output id="lampTv">${S.lampT}</output></label><input id="lampT" type="range" min="0" max="10" value="${S.lampT}" data-slider="apers"></div>
+    <div id="lampArea">${lampArea(3,4,S.lampT,10)}</div>
+    <p class="qtext" style="margin-top:14px">Menurutmu, pada detik ke berapa kedua lampu menyala bersamaan lagi?</p>
+    ${chipSet('lamp',['7 detik','12 detik','24 detik','Belum tahu, mau mencoba dulu'],p.lamp)}
+    ${p.lamp?`<div class="fb neutral"><p>Tebakanmu dicatat: <b>${esc(p.lamp)}</b>. Kita buktikan nanti, ya!</p></div>`:''}
+    <label class="f" for="alasan">Mengapa kamu menebak begitu? (boleh dikosongkan)</label>
+    <textarea id="alasan" data-bind="pred.alasan" placeholder="Tuliskan alasanmu di sini">${esc(p.alasan)}</textarea>
+  </section>
+  <section class="block">
+    <h3>2. Kantong buah</h3>
+    <p>Kakak punya 10 apel dan 15 jeruk. Semua buah akan dibagi ke beberapa kantong. Setiap kantong harus berisi apel sama banyak dan jeruk sama banyak, dan tidak boleh ada buah yang tersisa.</p>
+    <p style="font-size:1.5rem;line-height:1.5;margin:6px 0 12px" aria-hidden="true">${'🍎'.repeat(10)}<br>${'🍊'.repeat(15)}</p>
+    <p class="qtext">Menurutmu, paling banyak bisa dibuat berapa kantong?</p>
+    ${chipSet('kantong',['2 kantong','5 kantong','10 kantong','15 kantong','Belum tahu, mau mencoba dulu'],p.kantong)}
+    ${p.kantong?`<div class="fb neutral"><p>Tebakanmu dicatat: <b>${esc(p.kantong)}</b>. Nanti kamu bisa mengujinya sendiri.</p></div>`:''}
+  </section>
+  <section class="block">
+    <h3>3. Dari pengalamanmu</h3>
+    <p>Pernahkah kamu melihat sesuatu yang terjadi berulang dengan jarak waktu berbeda (misalnya jadwal piket atau lampu kendaraan), atau membagi benda sama rata dengan teman?</p>
+    <label class="f" for="peng">Ceritakan singkat pengalamanmu (boleh dikosongkan)</label>
+    <textarea id="peng" data-bind="pred.pengalaman" placeholder="Contoh: Di rumah, aku menyapu setiap 2 hari dan adikku mencuci piring setiap 3 hari ...">${esc(p.pengalaman)}</textarea>
+    <details class="teacher"><summary>Catatan untuk guru: prediksi jawaban murid</summary>
+      <p style="margin-top:8px"><b>Lampu:</b> murid mungkin menjawab 7 detik (menjumlahkan 3 + 4), 12 detik (mengalikan 3 × 4), atau 24 detik (menggandakan). Sebagian akan menghitung satu per satu.</p>
+      <p><b>Kantong:</b> murid mungkin menjawab 10 atau 15 kantong (mengira satu buah satu kantong), 2 kantong (memilih bilangan genap pertama), atau mencoba membagi hingga menemukan 5.</p>
+      <p>Gunakan prediksi ini untuk memilih contoh konkret dan pertanyaan lanjutan saat murid berdiskusi.</p>
+    </details>
+  </section>`;
+}
+
+/* =====================================================================
+   TAHAP 3: ASESMEN AWAL
+   ===================================================================== */
+function sAwal(){
+  const i=S.kuis.ai||0;
+  const q=AWAL[i];
+  const all=nJawab(AWAL)===AWAL.length;
+  let h=`<div class="stage-head"><h2>Asesmen Awal</h2><p>Ada 5 soal singkat untuk mengetahui apa yang sudah kamu ketahui. Ini bukan nilai akhir, jadi jawablah dengan jujur.</p></div>
+  <section class="block">${chipsHTML('awal',AWAL.length,i,AWAL)}<div class="qmeta">Soal ${i+1} dari ${AWAL.length}</div>${mcHTML(q,'awal')}
+  <div class="qnav"><button class="btn ghost sm" type="button" data-a="qnav" data-k="awal" data-v="-1" ${i===0?'disabled':''}>Soal sebelumnya</button><button class="btn sm" type="button" data-a="qnav" data-k="awal" data-v="1" ${i===AWAL.length-1?'disabled':''}>Soal berikutnya</button></div></section>`;
+  if(all){
+    h+=`<section class="block"><h3>Peta awal pemahamanku</h3><p class="muted">Ini gambaran sementara untuk membantu kita belajar. Bagian yang masih perlu diperkuat akan kita latih di tahap berikutnya.</p><ul class="rev">`;
+    AWAL.forEach(q=>{const a=S.ans[q.id];h+=`<li><b>${esc(q.t)}</b>: ${a.ok?'sudah kuat':'akan kita perkuat bersama'}</li>`});
+    h+='</ul></section>';
+  }
+  return h;
+}
+
+/* =====================================================================
+   TAHAP 4: MATERI POKOK
+   ===================================================================== */
+const SUBS=['Kelipatan','Faktor','KPK','FPB','Memilih KPK atau FPB'];
+function mKelipatan(){
+  const n=S.mat.kn,N=50,c=S.mat.kcell;
+  const cells=range(1,N).map(i=>`<button type="button" class="cell ${i%n===0?'ca':''}" data-a="kcell" data-v="${i}" aria-label="${i}${i%n===0?', kelipatan '+n:''}">${i}</button>`).join('');
+  let info='Klik sebuah angka pada tabel untuk melihat apakah angka itu kelipatan '+n+'.';
+  if(c)info=c%n===0?`${c} = ${n} × ${c/n}, jadi ${c} adalah kelipatan ${n}.`:`${c} ÷ ${n} = ${Math.floor(c/n)} sisa ${c%n}, jadi ${c} bukan kelipatan ${n}.`;
+  return `<h3>Kelipatan</h3>
+  <p><b>Kelipatan</b> suatu bilangan didapat dengan mengalikan bilangan itu dengan 1, 2, 3, dan seterusnya. Bayangkan katak yang melompat dengan langkah sama besar. Ia hanya mendarat di petak-petak tertentu.</p>
+  <div class="chooser"><span class="lab">Pilih bilangan:</span><div class="chips">${range(2,9).map(k=>`<button type="button" class="chip ${k===n?'on':''}" data-a="mat" data-k="kn" data-v="${k}">${k}</button>`).join('')}</div></div>
+  <div class="grid10">${cells}</div>
+  <div class="note"><p><b>Kelipatan ${n}:</b> ${range(1,8).map(i=>n*i).join(', ')}, ...</p><p>${esc(info)}</p></div>
+  <p class="contoh">Contoh sehari-hari: satu pak berisi 6 telur. Banyak telur pada 1, 2, dan 3 pak adalah 6, 12, dan 18. Itulah kelipatan 6.</p>`;
+}
+function mFaktor(){
+  const n=S.mat.fn,fs=faktor(n);
+  const pairs=fs.filter(x=>x*x<=n).map(x=>[x,n/x]);
+  const arrs=pairs.map(([p,q])=>`<div class="arr"><div class="dots" style="grid-template-columns:repeat(${q},10px)" aria-hidden="true">${'<i></i>'.repeat(p*q)}</div><span>${p} × ${q}</span></div>`).join('');
+  return `<h3>Faktor</h3>
+  <p><b>Faktor</b> suatu bilangan adalah bilangan yang habis membagi bilangan itu, tanpa sisa. Faktor selalu berpasangan, seperti ukuran baris dan kolom ketika kita menata benda menjadi persegi panjang.</p>
+  <div class="chooser"><span class="lab">Pilih bilangan:</span>${stepper('mat','fn',n,2,36,'bilangan')}</div>
+  <div class="note"><p><b>Faktor ${n}:</b> ${fs.join(', ')}</p><p><b>Pasangan faktor:</b> ${pairs.map(([p,q])=>`${p} × ${q}`).join(', ')}</p><p>${fs.length===2?`${n} hanya punya dua faktor, yaitu 1 dan ${n} sendiri.`:`${n} punya ${fs.length} faktor.`}</p></div>
+  <p class="muted" style="margin-bottom:4px">Setiap pasangan faktor adalah satu cara menata ${n} kotak menjadi persegi panjang:</p>
+  <div class="arrs">${arrs}</div>
+  <p class="contoh">Contoh sehari-hari: 12 kursi bisa ditata 3 baris × 4 kursi, atau 2 baris × 6 kursi.</p>`;
+}
+function mKPK(){
+  const a=S.mat.ka,b=S.mat.kb,L=lcm(a,b),G=gcd(a,b);
+  const ma=range(1,L/a).map(i=>a*i),mb=range(1,L/b).map(i=>b*i);
+  return `<h3>Kelipatan Persekutuan Terkecil (KPK)</h3>
+  <p><b>Kelipatan persekutuan</b> adalah angka yang menjadi kelipatan dari kedua bilangan. <b>KPK</b> adalah kelipatan persekutuan yang paling kecil. KPK dipakai pada kejadian yang <b>berulang dan bertemu lagi</b>, seperti jadwal dan lampu berkedip.</p>
+  <div class="chooser"><span class="lab">Pilih dua bilangan:</span>${stepper('mat','ka',a,2,12,'bilangan pertama')}${stepper('mat','kb',b,2,12,'bilangan kedua')}</div>
+  <h4>Cara 1: daftar kelipatan</h4>
+  <div class="rowlist"><b class="ta">Kelipatan ${a}</b>${nums(ma,L)}</div>
+  <div class="rowlist"><b class="tb">Kelipatan ${b}</b>${nums(mb,L)}</div>
+  <div class="note ab"><p>Kelipatan persekutuan: ${[L,2*L,3*L].join(', ')}, ... Yang terkecil adalah <b>${L}</b>. Jadi <b>KPK ${a} dan ${b} = ${L}</b>.</p></div>
+  <h4>Cara 2: faktorisasi prima</h4>
+  <p>${fz(a)}<br>${fz(b)}</p>
+  <p>Ambil <b>semua</b> faktor prima dengan <b>pangkat tertinggi</b>: ${pStr(primaKpk(a,b))} = <b>${nilaiPrima(primaKpk(a,b))}</b></p>
+  <div class="note"><p><b>Fakta menarik:</b> untuk dua bilangan, KPK × FPB = bilangan pertama × bilangan kedua. Coba cek: ${L} × ${G} = ${L*G}, dan ${a} × ${b} = ${a*b}. Ternyata sama!</p></div>`;
+}
+function mFPB(){
+  const a=S.mat.fa,b=S.mat.fb,G=gcd(a,b),L=lcm(a,b);
+  const fa=faktor(a),fb=faktor(b),cm=fa.filter(x=>b%x===0);
+  const li=(arr)=>arr.map(x=>`<span class="num ${cm.includes(x)?'cab':''} ${x===G?'big':''}">${x}</span>`).join('');
+  return `<h3>Faktor Persekutuan Terbesar (FPB)</h3>
+  <p><b>Faktor persekutuan</b> adalah angka yang menjadi faktor dari kedua bilangan. <b>FPB</b> adalah faktor persekutuan yang paling besar. FPB dipakai ketika kita <b>membagi atau memotong sama rata</b> menjadi bagian sebanyak atau sebesar mungkin.</p>
+  <div class="chooser"><span class="lab">Pilih dua bilangan:</span>${stepper('mat','fa',a,2,48,'bilangan pertama')}${stepper('mat','fb',b,2,48,'bilangan kedua')}</div>
+  <h4>Cara 1: daftar faktor</h4>
+  <div class="rowlist"><b class="ta">Faktor ${a}</b>${li(fa)}</div>
+  <div class="rowlist"><b class="tb">Faktor ${b}</b>${li(fb)}</div>
+  <div class="note ab"><p>Faktor persekutuan: ${cm.join(', ')}. Yang terbesar adalah <b>${G}</b>. Jadi <b>FPB ${a} dan ${b} = ${G}</b>.</p></div>
+  <h4>Cara 2: faktorisasi prima</h4>
+  <p>${fz(a)}<br>${fz(b)}</p>
+  <p>Ambil faktor prima yang <b>sama-sama ada</b> dengan <b>pangkat terendah</b>: ${pStr(primaFpb(a,b))} = <b>${nilaiPrima(primaFpb(a,b))}</b></p>
+  <div class="note"><p><b>Fakta menarik:</b> FPB ${a} dan ${b} adalah ${G}, KPK-nya ${L}. ${G} × ${L} = ${G*L}, sama dengan ${a} × ${b} = ${a*b}.</p></div>`;
+}
+function mPilih(){
+  return `<h3>Memilih: KPK atau FPB?</h3>
+  <p>Banyak soal cerita terlihat mirip. Kuncinya adalah membaca kata-katanya dengan teliti dan bertanya: <i>apakah kejadiannya berulang dan bertemu lagi, atau membagi sama rata?</i></p>
+  <div class="flow">
+    <div>Baca soal dengan teliti</div><div class="arrow" aria-hidden="true">→</div>
+    <div class="k"><b>Bertemu atau berulang lagi?</b><br>Pakai <b>KPK</b></div>
+    <div class="f"><b>Membagi atau memotong sama rata?</b><br>Pakai <b>FPB</b></div>
+  </div>
+  <div class="tw"><table>
+    <tr><th></th><th class="k">KPK</th><th class="f">FPB</th></tr>
+    <tr><th>Pertanyaan khas</th><td>Kapan bersamaan lagi? Kapan bertemu lagi?</td><td>Paling banyak berapa bagian? Paling panjang berapa?</td></tr>
+    <tr><th>Kata kunci</th><td>bersamaan lagi, bertemu lagi, jadwal berulang</td><td>dibagi sama rata, sebanyak-banyaknya, sepanjang mungkin, terbesar</td></tr>
+    <tr><th>Hasilnya</th><td>tidak lebih kecil dari bilangan yang terbesar</td><td>tidak lebih besar dari bilangan yang terkecil</td></tr>
+    <tr><th>Contoh</th><td>Lampu menyala tiap 2 dan 3 detik, bersamaan lagi setiap 6 detik.</td><td>8 kelereng dan 12 kancing dibagi ke 4 kantong sama isi.</td></tr>
+  </table></div>
+  <div class="note b"><p><b>Tips teliti:</b> setelah mendapat jawaban, periksa kembali. Untuk KPK, apakah hasilnya habis dibagi kedua bilangan? Untuk FPB, apakah kedua bilangan habis dibagi hasilnya?</p></div>`;
+}
+function sMateri(){
+  const sub=S.mat.sub;
+  const body=[mKelipatan,mFaktor,mKPK,mFPB,mPilih][sub]();
+  const q=CEK[sub];
+  const done=CEK.map(c=>S.ans[c.id]&&S.ans[c.id].ok);
+  return `<div class="stage-head"><h2>Materi Pokok</h2><p>Belajar sedikit demi sedikit. Setiap bagian punya alat untuk dicoba dan satu pertanyaan singkat.</p></div>
+  <div class="sub" role="tablist">${SUBS.map((n,i)=>`<button type="button" class="chip ${i===sub?'on':''} ${done[i]?'done':''}" data-a="msub" data-v="${i}">${i+1}. ${n}</button>`).join('')}</div>
+  <section class="block">${body}</section>
+  <section class="block"><h3>Cek pemahaman</h3>${mcHTML(q,'cek')}
+    <div class="qnav"><button class="btn ghost sm" type="button" data-a="msub" data-v="${sub-1}" ${sub===0?'disabled':''}>Materi sebelumnya</button>${sub<4?`<button class="btn sm" type="button" data-a="msub" data-v="${sub+1}">Materi berikutnya</button>`:`<span class="muted">Materi selesai. Lanjut ke simulasi dengan tombol Berikutnya.</span>`}</div>
+  </section>`;
+}
+
+/* =====================================================================
+   TAHAP 5: SIMULASI INTERAKTIF
+   ===================================================================== */
+const MISI=[['lamp','Simulasi lampu'],['kantong','Simulasi kantong'],['dnd','Seret kartu'],['match','Cocokkan'],['bs','Benar atau salah']];
+function lampAB(){const L=S.sim.lamp;return L.tab<3?[LAMP_TASKS[L.tab].a,LAMP_TASKS[L.tab].b]:[L.a,L.b]}
+function misiLamp(){
+  const L=S.sim.lamp,[a,b]=lampAB(),m=L.msg[L.tab];
+  const tabs=LAMP_TASKS.map((t,i)=>`<button type="button" class="chip ${L.tab===i?'on':''} ${L.ok[i]?'done':''}" data-a="lampTab" data-v="${i}">Lampu ${t.a} dan ${t.b}</button>`).join('')+`<button type="button" class="chip ${L.tab===3?'on':''}" data-a="lampTab" data-v="3">Coba sendiri</button>`;
+  let h=`<h3>Misi 1: Lampu kelap-kelip</h3><p>Lampu <span class="ta">biru</span> menyala tiap ${a} detik dan lampu <span class="tb">oranye</span> tiap ${b} detik. Keduanya mulai bersamaan di detik ke-0. Tekan <b>Jalankan</b> dan amati tabel yang terisi warna.</p><div class="sub">${tabs}</div>`;
+  if(L.tab===3)h+=`<div class="chooser"><span class="lab">Atur lampu:</span>${stepper('lampAB','a',L.a,2,12,'selang lampu biru')}${stepper('lampAB','b',L.b,2,12,'selang lampu oranye')}</div>`;
+  h+=`<div class="btnrow"><button class="btn sm" type="button" data-a="lampRun">▶ Jalankan</button><button class="btn ghost sm" type="button" data-a="lampStop">Jeda</button><button class="btn ghost sm" type="button" data-a="lampAll">Tampilkan sampai 60</button><button class="btn ghost sm" type="button" data-a="lampReset">Ulang</button></div>
+  <div id="lampArea">${lampArea(a,b,L.t,60)}</div>`;
+  if(L.tab<3){
+    h+=`<label class="f" for="lampAns">Pada detik ke berapa kedua lampu pertama kali menyala bersamaan lagi?</label><div class="btnrow" style="align-items:center"><input id="lampAns" type="number" min="1" inputmode="numeric" value="${m&&m.val!==undefined?esc(m.val):''}"><span>detik</span><button class="btn sm" type="button" data-a="lampCek">Periksa</button></div>`;
+    if(m)h+=`<div class="fb ${m.ok?'good':'bad'}"><p>${m.text}</p></div>`;
+  }else{
+    h+=`<p class="muted">Coba pasangan lain, misalnya 7 dan 11. Menurutmu, apa yang terjadi jika kedua selang tidak punya faktor yang sama?</p>`;
+    if(L.t>=60&&lcm(a,b)>60)h+=`<div class="fb neutral"><p>Sampai detik 60 belum ada yang bersamaan. Kelipatan persekutuan terkecil dari ${a} dan ${b} adalah ${lcm(a,b)}.</p></div>`;
+  }
+  h+=`<label class="f" for="cara">Ceritakan caramu menemukan jawabannya (boleh dikosongkan)</label><textarea id="cara" data-bind="sim.lamp.cara" placeholder="Contoh: Aku mencari warna ungu pertama di tabel ...">${esc(L.cara)}</textarea>`;
+  return h;
+}
+function misiKantong(){
+  const K=S.sim.kantong,T=KANTONG[K.tab],m=K.msg[K.tab];
+  const tabs=KANTONG.map((t,i)=>`<button type="button" class="chip ${K.tab===i?'on':''} ${K.ok[i]?'done':''}" data-a="kTab" data-v="${i}">${t.A} apel, ${t.J} jeruk</button>`).join('');
+  return `<h3>Misi 2: Bagi ke kantong</h3><p>Ada <b>${T.A} apel</b> dan <b>${T.J} jeruk</b>. Geser pengatur untuk menentukan banyak kantong. Setiap kantong harus sama isi dan tidak boleh ada sisa. Temukan banyak kantong yang <b>paling banyak</b>.</p><div class="sub">${tabs}</div>
+  <div class="slider-row"><label for="kSlider">Kantong: <output id="kv">${K.k}</output></label><input id="kSlider" type="range" min="1" max="24" value="${K.k}" data-slider="kantong"></div>
+  <div id="kArea">${kantongArea(T,K.k)}</div>
+  <label class="f" for="kAns">Paling banyak berapa kantong tanpa sisa?</label><div class="btnrow" style="align-items:center"><input id="kAns" type="number" min="1" inputmode="numeric" value="${m&&m.val!==undefined?esc(m.val):''}"><span>kantong</span><button class="btn sm" type="button" data-a="kCek">Periksa</button></div>
+  ${m?`<div class="fb ${m.ok?'good':'bad'}"><p>${m.text}</p></div>`:''}`;
+}
+function misiDnd(){
+  const D=S.sim.dnd,R=DND[D.round];
+  const pool=R.cards.filter(c=>!D.placed[c]);
+  const card=(c,placed)=>`<button type="button" class="dcard ${placed?'placed':''} ${D.sel===c&&!placed?'sel':''}" ${placed?'disabled':`data-a="dcard" data-card="${c}"`}>${c}</button>`;
+  const z=(key,title,cls)=>`<div class="zone ${cls} zonebtn" data-zone="${key}" data-a="dzone" data-z="${key}" role="button" tabindex="0" aria-label="Kotak ${esc(title)}"><h4>${esc(title)}</h4><div class="zi">${R.cards.filter(c=>D.placed[c]===key).map(c=>card(c,true)).join('')}</div></div>`;
+  const rtabs=DND.map((r,i)=>`<span class="chip ${D.round===i?'on':''} ${D.doneR[i]?'done':''}" style="cursor:default">Ronde ${i+1}: ${r.judul}</span>`).join('');
+  const rdone=pool.length===0;
+  return `<h3>Misi 3: Seret kartu ke kotak yang tepat</h3><p>Seret setiap kartu ke kotak yang sesuai. Di layar sentuh, kamu juga bisa mengetuk kartu dulu, lalu mengetuk kotaknya.</p><div class="sub">${rtabs}</div>
+  <div class="dnd"><div class="pool" data-pool aria-label="Kartu yang belum dipindahkan">${pool.length?pool.map(c=>card(c,false)).join(''):'<span class="muted">Semua kartu sudah dipindahkan.</span>'}</div>
+  <div class="zones">${z('y',R.yes,'y')}${z('n',R.no,'n')}</div></div>
+  ${D.msg?`<div class="fb ${D.msgOk?'good':'bad'}" aria-live="polite"><p>${esc(D.msg)}</p></div>`:''}
+  <p class="muted" style="margin-top:8px">Percobaan yang belum tepat: ${D.wrong}</p>
+  ${rdone?(D.round<DND.length-1?`<button class="btn" type="button" data-a="dnext">Lanjut ke ronde ${D.round+2}</button>`:`<div class="fb good"><p><b>Hebat!</b> Semua kartu pada kedua ronde sudah tepat.</p></div>`):''}`;
+}
+function misiMatch(){
+  const M=S.sim.match;
+  const left=MATCH.map(m=>{const dn=M.matched[m.id];return `<button type="button" class="mbtn ${dn?'done':''} ${M.sel===m.id?'sel':''}" ${dn?'disabled':`data-a="mleft" data-v="${m.id}"`}>${esc(m.s)}${dn?`<span class="tagj">${m.j}</span>`:''}</button>`}).join('');
+  const right=M.order.map(id=>{const m=MATCH.find(x=>x.id===id);const dn=M.matched[id];return `<button type="button" class="mbtn ${dn?'done':''}" ${dn?'disabled':`data-a="mright" data-v="${id}"`}><b>${esc(m.r)}</b></button>`}).join('');
+  const n=Object.keys(M.matched).length;
+  return `<h3>Misi 4: Jodohkan soal dengan jawabannya</h3><p>Pilih sebuah soal di kiri, lalu pilih jawaban yang cocok di kanan. Hitung dulu di kertas coretan agar teliti.</p>
+  <div class="mcols"><div>${left}</div><div>${right}</div></div>
+  ${M.msg?`<div class="fb ${M.msgOk?'good':'neutral'}" aria-live="polite"><p>${esc(M.msg)}</p></div>`:''}
+  <p class="muted">Pasangan tepat: ${n} dari ${MATCH.length}. Percobaan yang belum cocok: ${M.wrong}.</p>
+  ${n===MATCH.length?`<div class="fb good"><p><b>Hebat!</b> Dua soal memakai KPK dan dua soal memakai FPB. Kamu sudah bisa membedakannya.</p></div>`:''}`;
+}
+function misiBS(){
+  const B=S.sim.bs.ans;
+  let h=`<h3>Misi 5: Benar atau salah?</h3><p>Tentukan apakah tiap pernyataan benar atau salah. Penjelasan akan muncul setelah kamu memilih.</p>`;
+  BS.forEach((b,i)=>{
+    const a=B[i];
+    h+=`<div class="bsitem"><p style="margin:0;font-weight:600">${i+1}. ${esc(b.t)}</p><div class="bsbtns">
+      <button type="button" class="btn ghost sm ${a&&a.v===true?'picked':''}" data-a="bs" data-i="${i}" data-v="1" ${a?'disabled':''}>Benar</button>
+      <button type="button" class="btn ghost sm ${a&&a.v===false?'picked':''}" data-a="bs" data-i="${i}" data-v="0" ${a?'disabled':''}>Salah</button></div>
+      ${a?`<div class="fb ${a.v===b.a?'good':'bad'}"><p><b>${a.v===b.a?'Tepat!':'Belum tepat.'}</b> Pernyataan ini ${b.a?'benar':'salah'}. ${esc(b.e)}</p></div>`:''}</div>`;
+  });
+  const n=Object.keys(B).length,k=BS.filter((b,i)=>B[i]&&B[i].v===b.a).length;
+  if(n===BS.length)h+=`<div class="fb neutral"><p>Kamu menjawab tepat ${k} dari ${BS.length} pernyataan.</p></div>`;
+  return h;
+}
+function sSim(){
+  const t=S.sim.tab,d=S.sim.done;
+  const tabs=MISI.map(([k,n],i)=>`<button type="button" class="chip ${t===i?'on':''} ${d[k]?'done':''}" data-a="simTab" data-v="${i}">${i+1}. ${n}</button>`).join('');
+  const body=[misiLamp,misiKantong,misiDnd,misiMatch,misiBS][t]();
+  const nd=Object.values(d).filter(Boolean).length;
+  return `<div class="stage-head"><h2>Simulasi Interaktif</h2><p>Saatnya mencoba sendiri! Ada 5 misi. Kalau jawabanmu belum tepat, kamu boleh mencoba lagi. Misi selesai: ${nd} dari 5.</p></div>
+  <div class="sub" role="tablist">${tabs}</div><section class="block">${body}</section>`;
+}
+
+/* =====================================================================
+   TAHAP 6: KUIS
+   ===================================================================== */
+function sKuis(){
+  const i=S.kuis.i,q=KUIS[i],all=nJawab(KUIS)===KUIS.length,sk=skorKuis();
+  let h=`<div class="stage-head"><h2>Kuis Interaktif</h2><p>Ada 10 soal penalaran. Setiap soal bernilai 10 poin. Setelah menjawab, baca pembahasannya.</p></div>
+  <section class="block">${chipsHTML('kuis',KUIS.length,i,KUIS)}<div class="qmeta">Soal ${i+1} dari ${KUIS.length} · ${esc(q.t)} · Skor sementara: <b>${sk}</b></div>${mcHTML(q,'once')}
+  <div class="qnav"><button class="btn ghost sm" type="button" data-a="qnav" data-k="kuis" data-v="-1" ${i===0?'disabled':''}>Soal sebelumnya</button><button class="btn sm" type="button" data-a="qnav" data-k="kuis" data-v="1" ${i===KUIS.length-1?'disabled':''}>Soal berikutnya</button></div></section>`;
+  if(all){
+    const msg=sk>=90?'Luar biasa! Penalaranmu sangat tajam.':sk>=70?'Bagus sekali! Sedikit lagi kamu mahir.':'Terima kasih sudah berusaha. Baca lagi pembahasannya, lalu coba lagi bagian yang masih sulit.';
+    h+=`<section class="block result"><h3>Hasil kuis</h3><div class="bigscore">${sk}<small> / 100</small></div><p>${nBenar(KUIS)} dari 10 soal tepat. ${msg}</p></section>`;
+  }
+  return h;
+}
+
+/* =====================================================================
+   TAHAP 7: ASESMEN AKHIR
+   ===================================================================== */
+function sAkhir(){
+  const i=S.akhir.i,nmc=AKHIR.length,total=nmc+URAIAN.length;
+  const mcDone=nJawab(AKHIR)===nmc;
+  let chips='<div class="qchips">';
+  for(let k=0;k<total;k++){
+    const dn=k<nmc?S.ans[AKHIR[k].id]:S.u[URAIAN[k-nmc].id].trim();
+    chips+=`<button type="button" class="qc ${i===k?'cur':''} ${dn?'done':''}" data-a="qgo" data-k="akhir" data-v="${k}" aria-label="Soal ${k+1}">${k+1}</button>`;
+  }
+  chips+=`<button type="button" class="qc wide ${i===total?'cur':''}" data-a="qgo" data-k="akhir" data-v="${total}" ${mcDone?'':'disabled'}>Hasil</button></div>`;
+  let h=`<div class="stage-head"><h2>Asesmen Akhir</h2><p>10 soal pilihan ganda dan 2 soal uraian singkat. Kerjakan dengan mandiri dan teliti. Pilihan ganda hanya bisa dijawab satu kali.</p></div><section class="block">${chips}`;
+  if(i<nmc){
+    const q=AKHIR[i];
+    h+=`<div class="qmeta">Soal ${i+1} dari ${total} · Pilihan ganda</div>${mcHTML(q,'once')}`;
+  }else if(i<total){
+    const u=URAIAN[i-nmc],txt=S.u[u.id],kn=S.ukey[u.id];
+    h+=`<div class="qmeta">Soal ${i+1} dari ${total} · Uraian singkat</div><p class="qtext">${esc(u.q)}</p>
+    <label class="f sr" for="ur">Jawabanmu</label><textarea id="ur" data-bind="u.${u.id}" style="min-height:140px" placeholder="Tuliskan langkah dan alasanmu di sini">${esc(txt)}</textarea>
+    <div class="btnrow"><button type="button" class="btn sm" data-a="ukey" data-k="${u.id}" ${txt.trim().length<5?'disabled':''}>${kn?'Sembunyikan':'Lihat'} kunci dan penilaian diri</button></div>`;
+    if(kn){
+      h+=`<div class="note"><p><b>Contoh jawaban:</b> ${esc(u.kunci)}</p></div><p><b>Penilaian diri</b> (centang yang sudah ada pada jawabanmu):</p><div class="checks">`;
+      u.rubrik.forEach((r,ri)=>{h+=`<label class="ck"><input type="checkbox" data-a="rub" data-k="${u.id}" data-v="${ri}" ${S.rub[u.id][ri]?'checked':''}><span>${esc(r)}</span></label>`});
+      h+=`</div><p class="muted" style="margin-top:8px">Penilaian diri ini membantumu dan gurumu berdiskusi. Nilai akhir dihitung dari pilihan ganda.</p>`;
+    }
+  }else{
+    const sk=skorAkhir(),kat=kategori(sk);
+    const salah=AKHIR.filter(q=>!S.ans[q.id].ok).map(q=>q.t);
+    const ranges=[['Sangat Baik','90–100'],['Baik','75–89'],['Cukup','60–74'],['Perlu Bimbingan','0–59']];
+    const aw=nBenar(AWAL);
+    h+=`<div class="result"><h3>Hasil asesmen akhir</h3><div class="bigscore">${sk}<small> / 100</small></div><span class="badge ${katKelas(sk)}">${kat}</span>
+    <p>${nBenar(AKHIR)} dari 10 soal pilihan ganda tepat (10 poin per soal). Pada asesmen awal, kamu menjawab tepat ${aw} dari 5 soal.</p>
+    <table class="rng"><tr><th>Kategori</th><th>Rentang skor</th></tr>${ranges.map(([n,r])=>`<tr class="${n===kat?'me':''}"><td>${n}</td><td>${r}</td></tr>`).join('')}</table></div>
+    <div class="left">${salah.length?`<p><b>Topik yang bisa diulang:</b></p><ul class="rev">${[...new Set(salah)].map(t=>`<li>${esc(t)}</li>`).join('')}</ul>`:'<p><b>Semua soal pilihan ganda tepat. Luar biasa!</b></p>'}
+    <p><b>Soal uraian</b> (dinilai bersama gurumu):</p><ul class="rev">${URAIAN.map((u,k)=>`<li>Soal ${k+1}: ${S.u[u.id].trim()?'sudah dijawab':'belum dijawab'}${S.u[u.id].trim()?`, penilaian diri ${S.rub[u.id].filter(Boolean).length} dari 3 poin`:''}</li>`).join('')}</ul></div>`;
+  }
+  h+=`<div class="qnav"><button class="btn ghost sm" type="button" data-a="qnav" data-k="akhir" data-v="-1" ${i===0?'disabled':''}>Sebelumnya</button><button class="btn sm" type="button" data-a="qnav" data-k="akhir" data-v="1" ${i>=total||(i===total-1&&!mcDone)?'disabled':''}>${i===total-1?'Lihat hasil':'Berikutnya'}</button></div></section>`;
+  return h;
+}
+
+/* =====================================================================
+   TAHAP 8: REFLEKSI, TAHAP 9: PENUTUP
+   ===================================================================== */
+function sRefleksi(){
+  const R=S.refl;
+  const grp=(path,list,arr)=>`<div class="checks">${list.map((l,i)=>`<label class="ck"><input type="checkbox" data-grp="${path}" value="${esc(l)}" ${arr.includes(l)?'checked':''}><span>${esc(l)}</span></label>`).join('')}</div>`;
+  const scale=(name,cur)=>`<div class="scale" role="radiogroup">${['Belum','Kadang-kadang','Sering','Selalu'].map((l,i)=>`<label><input type="radio" name="${name}" data-bind="refl.${name}" data-num="1" value="${i+1}" ${cur===i+1?'checked':''}>${l}</label>`).join('')}</div>`;
+  return `<div class="stage-head"><h2>Refleksi</h2><p>Mari melihat kembali perjalanan belajarmu. Tidak ada jawaban benar atau salah di sini. Jawabanmu tersimpan selama kamu belum menutup halaman ini.</p></div>
+  <section class="block"><h3>Yang sudah kupahami</h3>${grp('refl.paham',REFL_TOPIK,R.paham)}</section>
+  <section class="block"><h3>Yang masih sulit bagiku</h3>${grp('refl.sulit',[...REFL_TOPIK,'Belum ada yang sulit'],R.sulit)}</section>
+  <section class="block"><h3>Kegiatan yang paling membantuku</h3><div class="chips" role="radiogroup">${BANTU.map(l=>`<label class="chip ${R.bantu===l?'on':''}" style="cursor:pointer"><input class="sr" type="radio" name="bantu" data-bind="refl.bantu" value="${esc(l)}" ${R.bantu===l?'checked':''}>${esc(l)}</label>`).join('')}</div></section>
+  <section class="block"><h3>Aku dan caraku belajar</h3>
+    <p class="qtext">Aku memeriksa kembali jawabanku sebelum yakin (teliti).</p>${scale('teliti',R.teliti)}
+    <p class="qtext" style="margin-top:16px">Aku mencoba sendiri dulu sebelum meminta bantuan (mandiri).</p>${scale('mandiri',R.mandiri)}</section>
+  <section class="block"><h3>Ke depan</h3>
+    <label class="f" for="pakai">Di mana aku bisa memakai KPK atau FPB dalam kehidupan sehari-hari?</label><textarea id="pakai" data-bind="refl.pakai">${esc(R.pakai)}</textarea>
+    <label class="f" for="lanjut">Hal yang ingin kupelajari lebih lanjut</label><textarea id="lanjut" data-bind="refl.lanjut">${esc(R.lanjut)}</textarea></section>`;
+}
+function sPenutup(){
+  const sk=skorAkhir(),dn=nJawab(AKHIR)===AKHIR.length;
+  const mot=!dn?'Terima kasih sudah belajar. Kamu bisa kembali ke Asesmen Akhir kapan saja.':sk>=90?'Hebat! Kamu menguasai KPK dan FPB dengan sangat baik. Bantu temanmu yang masih kesulitan, ya.':sk>=75?'Bagus! Kamu sudah memahami KPK dan FPB. Sedikit latihan lagi akan membuatmu semakin mahir.':sk>=60?'Kamu sudah di jalur yang tepat. Ulangi bagian yang masih sulit, dan jangan ragu bertanya.':'Terima kasih sudah berusaha dengan sungguh-sungguh. Belajar butuh proses. Mari ulangi bagian yang sulit bersama gurumu.';
+  return `<div class="stage-head"><h2>Penutup</h2><p>${esc(mot)}</p></div>
+  <section class="block"><h3>Ringkasan materi</h3><div class="sum">
+    <div class="k"><h4 class="ta">KPK, kelipatan persekutuan terkecil</h4><p>Kelipatan yang sama dari dua bilangan, yang paling kecil.</p><p><b>Dipakai untuk:</b> kejadian yang berulang dan bertemu lagi (jadwal, lampu, keberangkatan).</p></div>
+    <div class="f"><h4 class="tb">FPB, faktor persekutuan terbesar</h4><p>Faktor yang sama dari dua bilangan, yang paling besar.</p><p><b>Dipakai untuk:</b> membagi atau memotong sama rata sebanyak atau sebesar mungkin.</p></div></div>
+    <div class="note ab"><p><b>Ingat:</b> baca soal dengan teliti, tentukan KPK atau FPB, hitung, lalu periksa kembali jawabanmu.</p></div></section>
+  ${dn?`<section class="block"><h3>Hasilmu</h3><ul class="rev"><li>Kuis: ${skorKuis()} dari 100 (${nJawab(KUIS)} soal dijawab)</li><li>Asesmen akhir: ${sk} dari 100, kategori <b>${kategori(sk)}</b></li></ul></section>`:''}
+  <section class="block"><h3>Tantangan di rumah: Detektif KPK dan FPB</h3><ol><li>Cari dua kegiatan di rumah yang berulang dengan jarak hari berbeda, misalnya menyapu tiap 2 hari dan menyiram tanaman tiap 3 hari. Hitung kapan keduanya jatuh pada hari yang sama lagi.</li><li>Ambil dua kelompok benda, misalnya 12 pensil dan 18 penghapus. Bagi sama rata ke kantong sebanyak mungkin. Tulis hasilnya di bukumu.</li><li>Ceritakan temuanmu kepada keluargamu.</li></ol></section>
+  <div class="btnrow"><button class="btn ghost" type="button" data-a="cetak">Cetak ringkasan</button><button class="btn big ok" type="button" data-a="selesai">Selesai Belajar</button></div>`;
+}
+
+/* =====================================================================
+   RENDER, NAVIGASI, DAN ALUR
+   ===================================================================== */
+const VIEW=[sPembuka,sApersepsi,sAwal,sMateri,sSim,sKuis,sAkhir,sRefleksi,sPenutup];
+const DONE=[
+ ()=>true,
+ ()=>S.pred.lamp!==null&&S.pred.kantong!==null,
+ ()=>nJawab(AWAL)===AWAL.length,
+ ()=>CEK.every(q=>S.ans[q.id]&&S.ans[q.id].ok),
+ ()=>Object.values(S.sim.done).every(Boolean),
+ ()=>nJawab(KUIS)===KUIS.length,
+ ()=>nJawab(AKHIR)===AKHIR.length&&S.u.u1.trim()!==''&&S.u.u2.trim()!=='',
+ ()=>!!S.refl.bantu,
+ ()=>S.selesai
+];
+
+function renderMenu(){
+  let h='',lastF=-1;
+  STAGES.forEach((s,i)=>{
+    if(s.f!==lastF){h+=`<div class="mg">${FASE[s.f]}</div>`;lastF=s.f}
+    const locked=i>S.max,ok=i<=S.max&&i!==S.stage&&DONE[i]();
+    h+=`<button type="button" class="mi ${i===S.stage?'cur':''} ${ok?'ok':''}" data-a="goto" data-v="${i}" ${locked?'aria-disabled="true"':''} ${i===S.stage?'aria-current="step"':''}><span class="no">${ok?'✓':i+1}</span><span>${s.n}</span></button>`;
+  });
+  const ks=nJawab(KUIS),as=nJawab(AKHIR);
+  h+=`<div class="score">${ks?`Skor kuis: <b>${skorKuis()}</b>/100<br>`:''}${as?`Asesmen akhir: <b>${skorAkhir()}</b>/100`:''}${!ks&&!as?'Skor akan muncul di sini.':''}</div>`;
+  $('#menu').innerHTML=h;
+  const cur=$('#menu .mi.cur');
+  if(cur&&cur.scrollIntoView&&window.innerWidth<=900)try{cur.scrollIntoView({inline:'center',block:'nearest'})}catch(e){}
+}
+function renderPager(){
+  $('#btnPrev').disabled=S.stage===0;
+  const nx=$('#btnNext');nx.style.visibility=S.stage>=STAGES.length-1?'hidden':'visible';
+  $('#pagerMid').textContent=`${STAGES[S.stage].n}`;
+  $('#progLabel').textContent=`Tahap ${S.stage+1} dari ${STAGES.length}`;
+  const pct=Math.round(S.max/(STAGES.length-1)*100);
+  $('#progPct').textContent=pct+'%';$('#progFill').style.width=pct+'%';
+}
+function render(keep){
+  stopTimer();
+  const y=window.scrollY;
+  $('#stage').innerHTML=VIEW[S.stage]();
+  renderMenu();renderPager();
+  if(keep)window.scrollTo(0,y);
+}
+function go(i){
+  S.stage=i;S.max=Math.max(S.max,i);S.warn=-1;
+  render(false);window.scrollTo({top:0});
+  try{$('#stage').focus({preventScroll:true})}catch(e){}
+}
+function markSim(){
+  const s=S.sim,L=s.lamp,K=s.kantong;
+  s.done.lamp=LAMP_TASKS.every((t,i)=>L.ok[i]);
+  s.done.kantong=KANTONG.every((t,i)=>K.ok[i]);
+  s.done.dnd=DND.every((r,i)=>s.dnd.doneR[i]);
+  s.done.match=Object.keys(s.match.matched).length===MATCH.length;
+  s.done.bs=Object.keys(s.bs.ans).length===BS.length;
+}
+function lampHint(v,a,b){
+  const L=lcm(a,b);
+  if(!(v>0))return 'Tulis bilangan bulat yang lebih dari 0, ya.';
+  if(v>L&&v%L===0)return `Pada detik ${v} memang kedua lampu menyala bersamaan, tetapi masih ada yang lebih awal. Cari yang pertama.`;
+  const ma=v%a===0,mb=v%b===0;
+  if(ma&&!mb)return `Pada detik ${v} hanya lampu biru yang menyala. Lampu oranye menyala setiap ${b} detik.`;
+  if(mb&&!ma)return `Pada detik ${v} hanya lampu oranye yang menyala. Lampu biru menyala setiap ${a} detik.`;
+  return `Pada detik ${v} belum ada lampu yang menyala bersamaan. Jalankan simulasi dan cari kotak ungu yang pertama.`;
+}
+
+/* ---------- aksi klik ---------- */
+let suppressClick=false;
+const A={
+ next(){
+  if(S.stage>=STAGES.length-1)return;
+  if(!DONE[S.stage]()&&S.warn!==S.stage){S.warn=S.stage;toast('Masih ada kegiatan yang belum selesai di tahap ini. Tekan Berikutnya lagi jika ingin tetap lanjut.');return}
+  go(S.stage+1);
+ },
+ prev(){if(S.stage>0)go(S.stage-1)},
+ goto(b){const i=+b.dataset.v;if(i<=S.max&&i!==S.stage)go(i)},
+ pred(b){S.pred[b.dataset.k]=b.dataset.v;render(true)},
+ pick(b){
+  const q=QMAP[b.dataset.q],mode=b.dataset.m,sel=+b.dataset.v,cur=S.ans[q.id];
+  if(cur&&(mode!=='cek'||cur.ok))return;
+  S.ans[q.id]={sel,ok:sel===q.a,tries:(cur?cur.tries:0)+1};
+  render(true);
+ },
+ qgo(b){
+  const k=b.dataset.k,v=+b.dataset.v;
+  if(k==='awal')S.kuis.ai=v;else if(k==='kuis')S.kuis.i=v;else S.akhir.i=v;
+  render(true);
+ },
+ qnav(b){
+  const k=b.dataset.k,d=+b.dataset.v;
+  if(k==='awal')S.kuis.ai=Math.max(0,Math.min(AWAL.length-1,(S.kuis.ai||0)+d));
+  else if(k==='kuis')S.kuis.i=Math.max(0,Math.min(KUIS.length-1,S.kuis.i+d));
+  else{const tot=AKHIR.length+URAIAN.length;S.akhir.i=Math.max(0,Math.min(tot,S.akhir.i+d))}
+  render(true);
+ },
+ msub(b){const v=+b.dataset.v;if(v>=0&&v<=4){S.mat.sub=v;render(false);window.scrollTo({top:0})}},
+ mat(b){
+  const k=b.dataset.k,v=+b.dataset.v;
+  const lim={kn:[2,9],fn:[2,36],ka:[2,12],kb:[2,12],fa:[2,48],fb:[2,48]}[k];
+  if(!lim||v<lim[0]||v>lim[1])return;
+  S.mat[k]=v;if(k==='kn')S.mat.kcell=null;render(true);
+ },
+ kcell(b){S.mat.kcell=+b.dataset.v;render(true)},
+ simTab(b){S.sim.tab=+b.dataset.v;render(false)},
+ /* lampu */
+ lampTab(b){const L=S.sim.lamp;L.tab=+b.dataset.v;L.t=0;render(true)},
+ lampAB(b){const L=S.sim.lamp,v=+b.dataset.v;if(v<2||v>12)return;L[b.dataset.k]=v;L.t=0;render(true)},
+ lampRun(){
+  const L=S.sim.lamp;stopTimer();if(L.t>=60)L.t=0;
+  timer=setInterval(()=>{L.t++;paintLamp();if(L.t>=60)stopTimer()},250);
+ },
+ lampStop(){stopTimer()},
+ lampAll(){stopTimer();S.sim.lamp.t=60;render(true)},
+ lampReset(){stopTimer();S.sim.lamp.t=0;render(true)},
+ lampCek(){
+  const L=S.sim.lamp,[a,b]=lampAB(),T=LAMP_TASKS[L.tab],raw=$('#lampAns').value,v=parseInt(raw,10);
+  if(v===T.ans){L.ok[L.tab]=true;L.msg[L.tab]={ok:true,val:v,text:`<b>Tepat!</b> Detik ke-${v} adalah kelipatan persekutuan terkecil dari ${a} dan ${b}. Itulah <b>KPK</b>: KPK ${a} dan ${b} = ${v}.`}}
+  else L.msg[L.tab]={ok:false,val:isNaN(v)?'':v,text:`<b>Belum tepat.</b> ${esc(lampHint(v,a,b))}`};
+  markSim();render(true);
+ },
+ /* kantong */
+ kTab(b){const K=S.sim.kantong;K.tab=+b.dataset.v;K.k=1;render(true)},
+ kCek(){
+  const K=S.sim.kantong,T=KANTONG[K.tab],v=parseInt($('#kAns').value,10);
+  if(v===T.f){K.ok[K.tab]=true;K.msg[K.tab]={ok:true,val:v,text:`<b>Tepat!</b> ${v} adalah bilangan terbesar yang membagi ${T.A} dan ${T.J} tanpa sisa. Itulah <b>FPB</b>: FPB ${T.A} dan ${T.J} = ${v}. Tiap kantong berisi ${T.A/v} apel dan ${T.J/v} jeruk.`}}
+  else if(!(v>0))K.msg[K.tab]={ok:false,val:'',text:'<b>Belum tepat.</b> Tulis bilangan bulat yang lebih dari 0, ya.'};
+  else if(T.A%v===0&&T.J%v===0)K.msg[K.tab]={ok:false,val:v,text:`<b>Belum tepat.</b> Dengan ${v} kantong memang tidak ada sisa, tetapi masih ada jumlah kantong yang lebih banyak. Geser pengaturnya lebih jauh.`};
+  else K.msg[K.tab]={ok:false,val:v,text:`<b>Belum tepat.</b> Dengan ${v} kantong masih tersisa ${T.A%v} apel dan ${T.J%v} jeruk.`};
+  markSim();render(true);
+ },
+ /* seret kartu */
+ dcard(b){
+  if(suppressClick)return;
+  const D=S.sim.dnd,c=+b.dataset.card;D.sel=D.sel===c?null:c;render(true);
+ },
+ dzone(b){
+  if(suppressClick)return;
+  const D=S.sim.dnd;if(D.sel===null)return;
+  dropCard(D.sel,b.dataset.z);
+ },
+ dnext(){const D=S.sim.dnd;D.round++;D.placed={};D.sel=null;D.msg='';D.wrong=0;render(true)},
+ /* cocokkan */
+ mleft(b){const M=S.sim.match;M.sel=M.sel===b.dataset.v?null:b.dataset.v;M.msg='';render(true)},
+ mright(b){
+  const M=S.sim.match;
+  if(!M.sel){toast('Pilih sebuah soal di kiri dulu.');return}
+  if(M.sel===b.dataset.v){M.matched[M.sel]=true;const m=MATCH.find(x=>x.id===M.sel);M.msg=`Cocok! Soal ini memakai ${m.j}.`;M.msgOk=true}
+  else{M.wrong++;M.msg='Belum cocok. Hitung ulang dulu: apakah soal ini mencari pertemuan kembali (KPK) atau pembagian sama rata (FPB)?';M.msgOk=false}
+  M.sel=null;markSim();render(true);
+ },
+ bs(b){
+  const i=+b.dataset.i,B=S.sim.bs.ans;if(B[i])return;
+  B[i]={v:b.dataset.v==='1'};markSim();render(true);
+ },
+ /* asesmen akhir */
+ ukey(b){S.ukey[b.dataset.k]=!S.ukey[b.dataset.k];render(true)},
+ rub(b){const arr=S.rub[b.dataset.k],i=+b.dataset.v;arr[i]=!arr[i]},
+
+ cetak(){
+  let emb=false;try{emb=window.self!==window.top}catch(e){emb=true}
+  if(!emb){try{window.print()}catch(e){toast('Cetak belum bisa dibuka. Coba tekan Ctrl+P.')}return}
+  /* di dalam bingkai (pratinjau/sandbox) perintah cetak sering diblokir: buka atau unduh berkas ringkasan */
+  try{
+   const url=URL.createObjectURL(new Blob([ringkasanHTML()],{type:'text/html'}));
+   const w=window.open(url,'_blank');
+   if(!w){const a=document.createElement('a');a.href=url;a.download='Ringkasan_KPK_FPB.html';document.body.appendChild(a);a.click();a.remove();toast('Ringkasan diunduh. Buka berkasnya lalu cetak dengan Ctrl+P.')}
+  }catch(e){try{window.print()}catch(e2){toast('Cetak diblokir di sini. Buka berkas HTML langsung di browser, lalu coba lagi.')}}
+ },
+ selesai(){
+  S.selesai=true;
+  $('#overlay').innerHTML=`<div class="final" role="dialog" aria-modal="true" aria-labelledby="fh"><div><h2 id="fh">Terima kasih sudah belajar!</h2><p>Kamu sudah menyelesaikan perjalanan belajar KPK dan FPB. Tetap teliti dan mandiri, ya!</p><div class="btnrow" style="justify-content:center"><button class="btn ghost" type="button" data-a="tutup">Kembali melihat materi</button><button class="btn" type="button" data-a="ulang">Mulai dari awal</button></div></div></div>`;
+  const f=$('#overlay .btn');if(f)f.focus();
+ },
+ tutup(){$('#overlay').innerHTML='';render(true)},
+ ulang(){try{window.location.reload()}catch(e){toast("Muat ulang halaman secara manual (F5) untuk mulai dari awal.")}}
+};
+function paintLamp(){
+  const el=$('#lampArea');if(!el)return;
+  const [a,b]=lampAB();el.innerHTML=lampArea(a,b,S.sim.lamp.t,60);
+}
+
+/* ---------- seret dan lepas ---------- */
+function dropCard(c,zone){
+  const D=S.sim.dnd,R=DND[D.round],y=R.isYes(c);
+  if((zone==='y')===y){
+    D.placed[c]=zone;D.msg=R.hint(c,y);D.msgOk=true;D.sel=null;
+    if(R.cards.every(x=>D.placed[x]))D.doneR[D.round]=true;
+  }else{
+    D.wrong++;D.msg='Belum tepat. '+R.hint(c,y);D.msgOk=false;D.sel=null;
+  }
+  markSim();render(true);
+}
+let drag=null;
+document.addEventListener('pointerdown',e=>{
+  const c=e.target.closest&&e.target.closest('.dcard[data-card]');
+  if(!c||c.disabled)return;
+  drag={el:c,id:+c.dataset.card,x0:e.clientX,y0:e.clientY,moved:false,ghost:null,pid:e.pointerId};
+});
+document.addEventListener('pointermove',e=>{
+  if(!drag||e.pointerId!==drag.pid)return;
+  if(!drag.moved&&Math.hypot(e.clientX-drag.x0,e.clientY-drag.y0)>8){
+    drag.moved=true;drag.ghost=drag.el.cloneNode(true);drag.ghost.classList.add('ghost');document.body.appendChild(drag.ghost);drag.el.classList.add('lifting');
+  }
+  if(drag.moved){
+    drag.ghost.style.left=e.clientX+'px';drag.ghost.style.top=e.clientY+'px';
+    document.querySelectorAll('.zone.hot').forEach(z=>z.classList.remove('hot'));
+    const t=document.elementFromPoint(e.clientX,e.clientY),z=t&&t.closest('[data-zone]');if(z)z.classList.add('hot');
+  }
+});
+function endDrag(e,cancel){
+  if(!drag||(e.pointerId!==drag.pid))return;
+  const d=drag;drag=null;
+  document.querySelectorAll('.zone.hot').forEach(z=>z.classList.remove('hot'));
+  if(d.ghost)d.ghost.remove();
+  if(d.el)d.el.classList.remove('lifting');
+  if(d.moved){
+    suppressClick=true;setTimeout(()=>{suppressClick=false},60);
+    if(!cancel){const t=document.elementFromPoint(e.clientX,e.clientY),z=t&&t.closest('[data-zone]');if(z)dropCard(d.id,z.dataset.zone)}
+  }
+}
+document.addEventListener('pointerup',e=>endDrag(e,false));
+document.addEventListener('pointercancel',e=>endDrag(e,true));
+
+/* ---------- delegasi peristiwa ---------- */
+document.addEventListener('click',e=>{
+  const b=e.target.closest('[data-a]');
+  if(!b||b.disabled||b.getAttribute('aria-disabled')==='true')return;
+  const f=A[b.dataset.a];if(f)f(b,e);
+});
+document.addEventListener('keydown',e=>{
+  if((e.key==='Enter'||e.key===' ')&&e.target.classList&&e.target.classList.contains('zonebtn')){e.preventDefault();A.dzone(e.target)}
+});
+document.addEventListener('input',e=>{
+  const t=e.target;
+  if(t.dataset&&t.dataset.slider==='apers'){S.lampT=+t.value;$('#lampTv').textContent=t.value;$('#lampArea').innerHTML=lampArea(3,4,S.lampT,10);return}
+  if(t.dataset&&t.dataset.slider==='kantong'){const K=S.sim.kantong;K.k=+t.value;$('#kv').textContent=K.k;$('#kArea').innerHTML=kantongArea(KANTONG[K.tab],K.k);return}
+  if(t.dataset&&t.dataset.bind&&t.type!=='radio'){setPath(t.dataset.bind,t.value);
+    if(t.dataset.bind.indexOf('u.')===0){const btn=document.querySelector('[data-a="ukey"]');if(btn)btn.disabled=t.value.trim().length<5}}
+});
+document.addEventListener('change',e=>{
+  const t=e.target;if(!t.dataset)return;
+  if(t.dataset.grp){
+    const arr=getPath(t.dataset.grp),v=t.value,i=arr.indexOf(v);
+    if(t.checked&&i<0)arr.push(v);if(!t.checked&&i>=0)arr.splice(i,1);return;
+  }
+  if(t.type==='radio'&&t.dataset.bind){
+    setPath(t.dataset.bind,t.dataset.num?+t.value:t.value);
+    if(t.dataset.bind==='refl.bantu')render(true);
+  }
+});
+
+render(false);
+})();
+</script>
+</body>
+</html>
